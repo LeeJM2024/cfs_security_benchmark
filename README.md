@@ -1,59 +1,48 @@
-# cFS/NOS3 Security Benchmark
+# cFS/NOS3 安全 Benchmark
 
-This project builds a repeatable security benchmark for cFS running in the
-NOS3 simulation environment.
+这个项目用于为 NOS3 仿真环境中的 cFS 构建一套可重复运行的安全 benchmark。
 
-The benchmark keeps one common description model for every attack:
+每个攻击场景都保留同一个描述模型：
 
 ```text
-attack entry -> affected component -> CPS type -> security consequence -> recovery strategy -> NOS3/cFS injection method
+攻击入口 -> 受影响组件 -> CPS 对应类型 -> 安全后果 -> 恢复策略 -> NOS3/cFS 注入方式
 ```
 
-## Attack Domains
+## 攻击域划分
 
-The full benchmark is organized into four implementation batches:
+完整 benchmark 按四个批次实现：
 
 1. RF-link security
 2. Space platform security
 3. Ground systems security
 4. Mission operations and supply-chain security
 
-This first version implements the RF-link security batch.
+当前版本先实现第一批：RF-link security。
 
-## RF-link Security Batch
+## RF-link Security 批次
 
-RF-link scenarios model attacks on command and telemetry links between a ground
-system and spacecraft communication interfaces. In NOS3/cFS, these attacks are
-represented by a UDP attack proxy. For formal benchmark runs, the proxy can be
-inserted transparently with iptables, so COSMOS/YAMCS can keep sending to the
-original cFS/NOS3 endpoint.
+RF-link 场景用于模拟地面系统与航天器通信接口之间的指令链路和遥测链路攻击。在 NOS3/cFS 中，这类攻击通过 UDP 攻击代理实现。正式运行 benchmark 时，代理可以通过 iptables 透明插入链路，因此 COSMOS/YAMCS 仍然向原始 cFS/NOS3 目标地址发送数据，不需要手动改地面端配置。
 
-Implemented attack effects:
+当前已经实现的攻击效果包括：
 
-- packet drop
-- packet delay
-- packet replay
-- packet bit flip
-- packet flood
-- packet fabrication
-- packet reordering
-- packet eavesdropping/logging
+- 数据包窃听与日志记录
+- 数据包丢弃
+- 数据包延迟
+- 数据包重放
+- 数据包位翻转
+- 数据包洪泛
+- 伪造数据包注入
+- 数据包乱序
 
-## Quick Start
+## 快速开始
 
-Run all RF-link scenarios in dry-run mode:
+在 dry-run 模式下预览所有 RF-link 场景：
 
-```powershell
-python -m cfs_security_benchmark.runner.run_benchmark --domain rf_link --dry-run
+```bash
+python3 -m cfs_security_benchmark.runner.run_benchmark --domain rf_link --dry-run
 ```
 
-Run all RF-link scenarios in dry-run mode:
-
-```powershell
-python -m cfs_security_benchmark.runner.run_benchmark --domain rf_link --dry-run
-```
-
-Preview a transparent RF-link run without changing iptables:
+预览一次透明 RF-link 运行，但不真正修改 iptables：
 
 ```bash
 python3 -m cfs_security_benchmark.runner.run_rf_link \
@@ -65,7 +54,7 @@ python3 -m cfs_security_benchmark.runner.run_rf_link \
   --dry-run
 ```
 
-Run a transparent RF-link benchmark in the NOS3 VM:
+在 NOS3 虚拟机中运行一次透明 RF-link benchmark：
 
 ```bash
 sudo python3 -m cfs_security_benchmark.runner.run_rf_link \
@@ -78,26 +67,22 @@ sudo python3 -m cfs_security_benchmark.runner.run_rf_link \
   --log reports/rf_link_eavesdrop_nos3.jsonl
 ```
 
-In transparent mode, COSMOS/YAMCS still sends to the original target. The runner
-temporarily adds an iptables redirect rule, starts the proxy, forwards traffic
-to the real target, and removes the rule when the run ends.
+透明模式下，COSMOS/YAMCS 仍然向原始目标发送数据。runner 会临时添加 iptables 重定向规则，启动攻击代理，把流量转发到真实目标，并在运行结束后删除规则。
 
-Use `--chain PREROUTING` when COSMOS/YAMCS is inside a Docker container and the
-packets cross the NOS3 VM host bridge. Use `--chain OUTPUT` when the sender is a
-local process running directly on the same Linux host as the proxy.
+当 COSMOS/YAMCS 位于 Docker 容器中，并且数据包会经过 NOS3 虚拟机宿主机的 bridge 时，使用 `--chain PREROUTING`。当发送方是直接运行在同一台 Linux 主机上的本地进程时，使用 `--chain OUTPUT`。
 
-The manual proxy entry point is still useful for local tests:
+手动代理入口仍然适合做本地调试，但这种模式要求发送方直接把流量发到代理端口：
 
-```powershell
-python -m cfs_security_benchmark.attacks.rf_link_proxy `
-  --scenario scenarios/rf_link/link_delay.yaml `
-  --listen 0.0.0.0:5000 `
+```bash
+python3 -m cfs_security_benchmark.attacks.rf_link_proxy \
+  --scenario scenarios/rf_link/link_delay.yaml \
+  --listen 0.0.0.0:5000 \
   --target 127.0.0.1:5010
 ```
 
-## Scenario Fields
+## 场景字段
 
-Each scenario stores both research meaning and executable parameters:
+每个 scenario 同时保存研究语义和可执行参数：
 
 - `attack_entry`
 - `affected_component`
@@ -109,5 +94,4 @@ Each scenario stores both research meaning and executable parameters:
 - `metrics`
 - `pass_criteria`
 
-This lets the benchmark remain readable as a research artifact while still
-being executable.
+这样 benchmark 既可以作为论文/实验中的攻击面描述材料阅读，也可以直接被程序执行。
