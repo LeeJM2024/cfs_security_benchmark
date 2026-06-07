@@ -1,0 +1,24 @@
+id: RF-LINK-007
+name: RF link fabricated packet
+domain: rf_link
+description:
+  attack_entry: RF-link / ground-to-space command path
+  affected_component: COM interface, TC fetcher, CI app
+  cps_type: Communication
+  security_consequence: Unauthorized or malformed packet injection into the command path
+  recovery_strategy: Source authentication, packet validation, command authorization, event logging
+  injection_method: UDP proxy sends attacker-controlled payload bytes to the target endpoint
+attack:
+  type: fabricate
+  direction: uplink
+  payload_hex: 1806c00000010000
+  interval_ms: 1000
+  count: 5
+metrics:
+  - packet_fabricated
+  - error_counter
+  - event_log
+pass_criteria:
+  min_packets_received: 0
+  min_attack_events: 1
+notes: Replace payload_text with payload_hex when testing exact cFS packet parser behavior.

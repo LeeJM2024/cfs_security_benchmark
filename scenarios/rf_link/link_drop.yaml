@@ -1,0 +1,23 @@
+id: RF-LINK-002
+name: RF link packet drop
+domain: rf_link
+description:
+  attack_entry: RF-link / ground-to-space command path
+  affected_component: COM interface, TC fetcher, CI app
+  cps_type: Communication
+  security_consequence: Denial of control through lost telecommands or lost telemetry
+  recovery_strategy: Retransmission, timeout handling, redundant link, minimum communication mode
+  injection_method: UDP proxy probabilistically drops packets before forwarding
+attack:
+  type: drop
+  direction: uplink
+  probability: 0.5
+metrics:
+  - packet_received
+  - packet_forwarded
+  - command_counter
+  - telemetry_continuity
+pass_criteria:
+  min_packets_received: 1
+  min_attack_events: 0
+notes: In a live NOS3 run, compare cFS command counter and telemetry continuity before and during attack.

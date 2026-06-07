@@ -1,0 +1,24 @@
+id: RF-LINK-005
+name: RF link bit flip
+domain: rf_link
+description:
+  attack_entry: RF-link / ground-to-space command or downlink telemetry path
+  affected_component: COM interface, TC parser, telemetry parser
+  cps_type: Communication
+  security_consequence: Message integrity violation, malformed telecommand, or misleading telemetry
+  recovery_strategy: CRC, authentication tag, parser hardening, reject malformed packets
+  injection_method: UDP proxy flips a configured bit in selected packets
+attack:
+  type: bit_flip
+  direction: uplink
+  offset: -1
+  bit: 0
+metrics:
+  - packet_received
+  - packet_forwarded
+  - error_counter
+  - parser_event_log
+pass_criteria:
+  min_packets_received: 1
+  min_attack_events: 1
+notes: Random offset is used when offset is -1.

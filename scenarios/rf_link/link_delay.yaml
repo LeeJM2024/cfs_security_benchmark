@@ -1,0 +1,23 @@
+id: RF-LINK-003
+name: RF link command delay
+domain: rf_link
+description:
+  attack_entry: RF-link / ground-to-space command path
+  affected_component: COM interface, TC fetcher, cFS command dispatch
+  cps_type: Communication
+  security_consequence: Denial or degradation of timely control by delayed commands
+  recovery_strategy: Command timeout, temporal validity checks, operator resynchronization
+  injection_method: UDP proxy sleeps before forwarding selected packets
+attack:
+  type: delay
+  direction: uplink
+  delay_ms: 2000
+metrics:
+  - packet_received
+  - packet_forwarded
+  - command_latency
+  - event_log
+pass_criteria:
+  min_packets_received: 1
+  min_attack_events: 0
+notes: Useful for testing whether command timing assumptions are visible in events or telemetry.

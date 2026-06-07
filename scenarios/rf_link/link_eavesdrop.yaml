@@ -1,0 +1,21 @@
+id: RF-LINK-001
+name: RF link eavesdropping baseline
+domain: rf_link
+description:
+  attack_entry: RF-link / ground-to-space UDP command or telemetry path
+  affected_component: COM interface, CI/TO link, radio interface
+  cps_type: Communication
+  security_consequence: Data leak through passive observation of command or telemetry packets
+  recovery_strategy: Link encryption, key rotation, traffic minimization, anomaly-aware operations
+  injection_method: UDP proxy logs packets and forwards them unchanged
+attack:
+  type: observe
+  direction: both
+metrics:
+  - packet_received
+  - packet_forwarded
+  - event_log
+pass_criteria:
+  min_packets_received: 0
+  min_attack_events: 0
+notes: Passive baseline used to confirm that the proxy is correctly placed on the link.

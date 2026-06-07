@@ -1,0 +1,26 @@
+id: RF-LINK-004
+name: RF link command replay
+domain: rf_link
+description:
+  attack_entry: RF-link / ground-to-space command path
+  affected_component: COM interface, CI app, cFS command handlers
+  cps_type: Communication
+  security_consequence: Seizure or misuse of control by repeating a previously valid command
+  recovery_strategy: Sequence counters, freshness checks, authentication, replay window rejection
+  injection_method: UDP proxy duplicates observed command packets
+attack:
+  type: replay
+  direction: uplink
+  probability: 1.0
+  repeats: 3
+  spacing_ms: 200
+metrics:
+  - packet_received
+  - packet_forwarded
+  - command_counter
+  - error_counter
+  - event_log
+pass_criteria:
+  min_packets_received: 1
+  min_attack_events: 1
+notes: Start with harmless commands such as NOOP, then move to state-changing commands only in controlled simulation.

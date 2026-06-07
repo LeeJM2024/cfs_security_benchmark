@@ -1,0 +1,25 @@
+id: RF-LINK-006
+name: RF link command flood
+domain: rf_link
+description:
+  attack_entry: RF-link / ground-to-space command path
+  affected_component: COM interface, CI app, cFE Software Bus, cFS apps
+  cps_type: Communication
+  security_consequence: Denial of control or resource exhaustion caused by excessive packets
+  recovery_strategy: Rate limiting, command source filtering, watchdog restart, safe mode
+  injection_method: UDP proxy sends random packets to the target endpoint at a configured rate
+attack:
+  type: flood
+  direction: uplink
+  rate_per_second: 20
+  payload_size: 64
+  flood_duration_seconds: 10
+metrics:
+  - packet_flooded
+  - cpu_load
+  - command_error_counter
+  - app_health
+pass_criteria:
+  min_packets_received: 0
+  min_attack_events: 1
+notes: Keep the rate low at first; increase only after confirming the VM and NOS3 remain recoverable.
