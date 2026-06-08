@@ -276,6 +276,7 @@ def _run_live_scenario(
                             telemetry_timeout=telemetry_timeout,
                             observation_path=proxy_observation_path if packet_capture_enabled else None,
                             listen_port=listen_port,
+                            proxy_log=proxy_log,
                         )
                         for result in sent_results:
                             command_results.append(result)
@@ -298,10 +299,14 @@ def _run_live_scenario(
     )
     dnat_evidence = _read_json(dnat_evidence_path) if dnat_evidence_path.exists() else {}
     dnat_packets = int(dnat_evidence.get("packets", 0) or 0)
+    proxy_received_packets = _count_proxy_events(proxy_log, "packet_received")
+    proxy_forwarded_packets = _count_proxy_events(proxy_log, "packet_forwarded")
     target_counter = _read_json(target_counter_path) if target_counter_path.exists() else {}
     target_counter_packets = int(target_counter.get("packets", 0) or 0)
     packet_summary["packets_redirected_by_dnat"] = dnat_packets
-    packet_summary["proxy_entry_packets"] = max(int(packet_summary["packets_to_proxy"]), dnat_packets)
+    packet_summary["proxy_received_packets"] = proxy_received_packets
+    packet_summary["proxy_forwarded_packets"] = proxy_forwarded_packets
+    packet_summary["proxy_entry_packets"] = max(int(packet_summary["packets_to_proxy"]), dnat_packets, proxy_received_packets)
     packet_summary["packets_seen_by_target_counter"] = target_counter_packets
     packet_summary["target_entry_packets"] = max(int(packet_summary["packets_to_target"]), target_counter_packets)
     score = _score_scenario(scenario, command_results, packet_summary, system_response)
@@ -338,6 +343,7 @@ def _print_scenario_result(score: LiveScore) -> None:
         "  traffic: "
         f"dnat={packet_summary.get('packets_redirected_by_dnat', 0)}, "
         f"proxy_entry={packet_summary.get('proxy_entry_packets', packet_summary.get('packets_to_proxy', 0))}, "
+        f"proxy_forwarded={packet_summary.get('proxy_forwarded_packets', 0)}, "
         f"target_entry={packet_summary.get('target_entry_packets', packet_summary.get('packets_to_target', 0))}"
     )
     notes = score.notes[:2]
@@ -692,6 +698,7 @@ def _send_scenario_commands(
     telemetry_timeout: float,
     observation_path: Path | None,
     listen_port: int,
+    proxy_log: Path | None = None,
 ) -> list[CosmosCommandResult]:
     if commands <= 0:
         return []
@@ -703,6 +710,7 @@ def _send_scenario_commands(
             commands=commands,
             command_wait=command_wait,
             telemetry_timeout=telemetry_timeout,
+            proxy_log=proxy_log,
         )
 
     if scenario.id == "RF-LINK-002":
@@ -784,9 +792,13 @@ def _send_reorder_commands(
     commands: int,
     command_wait: float,
     telemetry_timeout: float,
+    proxy_log: Path | None,
 ) -> list[CosmosCommandResult]:
     results: list[CosmosCommandResult] = []
-    for index in range(commands):
+    target_packets = int(scenario.attack.get("window_size", commands))
+    max_attempts = max(commands + 4, target_packets + 6)
+    for index in range(max_attempts):
+        received_before = _count_proxy_events(proxy_log, "packet_received") if proxy_log else 0
         result = send_noop_and_read_counter(
             container=environment.cosmos_container,
             target=environment.cosmos_target,
@@ -801,6 +813,9 @@ def _send_reorder_commands(
         result.raw.setdefault("requested", 1)
         result.raw.setdefault("burst_attempt", index + 1)
         results.append(result)
+        _wait_for_proxy_event_count(proxy_log, "packet_received", received_before + 1, timeout=max(1.5, command_wait + 1.0))
+        if proxy_log and _count_proxy_events(proxy_log, "packet_received") >= target_packets:
+            break
         if not result.ok:
             reconnect_interface(
                 container=environment.cosmos_container,
@@ -809,6 +824,32 @@ def _send_reorder_commands(
             )
         time.sleep(min(max(command_wait, 0.25), 0.75))
     return results
+
+
+def _wait_for_proxy_event_count(log_path: Path | None, event: str, count: int, timeout: float) -> bool:
+    if log_path is None:
+        return False
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if _count_proxy_events(log_path, event) >= count:
+            return True
+        time.sleep(0.1)
+    return False
+
+
+def _count_proxy_events(log_path: Path | None, event: str) -> int:
+    if log_path is None or not log_path.exists():
+        return 0
+    count = 0
+    with log_path.open("r", encoding="utf-8", errors="replace") as handle:
+        for line in handle:
+            try:
+                payload = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if payload.get("event") == event:
+                count += 1
+    return count
 
 
 def _burst_spacing(command_wait: float) -> float:
@@ -857,6 +898,8 @@ def _scenario_duration(scenario: Scenario, duration: float, commands: int, comma
         scenario_extra += float(scenario.attack.get("delay_ms", 1000)) / 1000.0
     if scenario.id in {"RF-LINK-002", "RF-LINK-008"}:
         scenario_extra += 4.0
+    if scenario.id == "RF-LINK-008":
+        scenario_extra += max(20.0, commands * (min(max(command_wait, 0.25), 0.75) + 3.0))
     if scenario.id in {"RF-LINK-001", "RF-LINK-003", "RF-LINK-004", "RF-LINK-005"}:
         scenario_extra += min(max(telemetry_timeout, 6.0), 15.0)
     return max(duration, scenario_extra + 8)
