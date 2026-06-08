@@ -11,7 +11,7 @@ description:
 attack:
   type: fabricate
   direction: uplink
-  payload_hex: 1806c00000010000
+  payload_text: BENCHMARK_FAKE_TC
   interval_ms: 1000
   count: 5
 metrics:
@@ -21,4 +21,4 @@ metrics:
 pass_criteria:
   min_packets_received: 0
   min_attack_events: 1
-notes: Replace payload_text with payload_hex when testing exact cFS packet parser behavior.
+notes: Uses attacker-controlled bytes rather than the COSMOS command API; verify with independent packet capture and system response.
