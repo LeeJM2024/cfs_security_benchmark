@@ -1,0 +1,110 @@
+{
+  "profile_id": "SC-APP-003",
+  "passed": true,
+  "artifact_accepted": true,
+  "benign_contract_passed": true,
+  "dormancy_observed": true,
+  "trigger_observed": true,
+  "coordination_observed": true,
+  "payload_invoked": true,
+  "mission_effect_observed": true,
+  "recovery_observed": true,
+  "details": {
+    "scenario": {
+      "id": "SC-APP-003",
+      "implementation_status": "live_verified",
+      "architecture": "colluding_components",
+      "trigger": "static",
+      "coordination": "software_bus",
+      "components": [
+        "sc_vendor_nav",
+        "sc_vendor_diag"
+      ]
+    },
+    "container": "cosmos-openc3-operator-1",
+    "verifier_report_dir": "/tmp/sc_vendor_results/sc-app-003-20260807T082637Z",
+    "returncode": 0,
+    "stderr": "",
+    "verifier": {
+      "scenario_id": "SC-APP",
+      "trigger_mode": 0,
+      "coordination_mode": 1,
+      "payload": "SC-PAYLOAD-EXFIL",
+      "artifact_accepted": true,
+      "benign_contract_passed": true,
+      "dormancy_observed": true,
+      "trigger_observed": true,
+      "coordination_observed": true,
+      "payload_invoked": true,
+      "mission_effect_observed": true,
+      "recovery_observed": true,
+      "trigger_input_observed": null,
+      "trigger_input_valid": null,
+      "passed": true,
+      "evidence": {
+        "before_nav": {
+          "sequence": 6848,
+          "armed": 0,
+          "triggered": 0,
+          "novatel_packets": 0,
+          "coordination_count": 0,
+          "exfil_commands": 0,
+          "last_latitude": 1.226270079612732,
+          "last_altitude": 400013.6875,
+          "fresh": true
+        },
+        "armed_nav": {
+          "sequence": 7104,
+          "armed": 1,
+          "triggered": 0,
+          "novatel_packets": 1,
+          "coordination_count": 0,
+          "exfil_commands": 0,
+          "last_latitude": 1.226270079612732,
+          "last_altitude": 400013.6875,
+          "fresh": true
+        },
+        "after_nav": {
+          "sequence": 7360,
+          "armed": 1,
+          "triggered": 1,
+          "novatel_packets": 4,
+          "coordination_count": 1,
+          "exfil_commands": 0,
+          "last_latitude": 1.226270079612732,
+          "last_altitude": 400013.6875,
+          "fresh": true
+        },
+        "before_diag": {
+          "sequence": 3776,
+          "triggered": 0,
+          "coordination_count": 0,
+          "exfil_commands": 0,
+          "fresh": true
+        },
+        "after_diag": {
+          "sequence": 4032,
+          "triggered": 1,
+          "coordination_count": 1,
+          "exfil_commands": 1,
+          "fresh": true
+        },
+        "stopped_nav": {
+          "sequence": 7616,
+          "armed": 0,
+          "triggered": 1,
+          "novatel_packets": 4,
+          "coordination_count": 1,
+          "exfil_commands": 0,
+          "last_latitude": 1.226270079612732,
+          "last_altitude": 400013.6875,
+          "fresh": true
+        },
+        "dormant_trigger_altitude_m": 100000.0,
+        "activation_trigger_altitude_m": 100000.0
+      }
+    }
+  },
+  "run_id": "sc-app-003-20260807T082637Z",
+  "generated_at": "2026-08-07T08:26:55.373938+00:00"
+}

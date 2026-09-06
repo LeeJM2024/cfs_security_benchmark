@@ -1,0 +1,8 @@
+#ifndef SC_VENDOR_DIAG_EVENTS_H
+#define SC_VENDOR_DIAG_EVENTS_H
+
+#define SC_VENDOR_DIAG_INIT_EID       1
+#define SC_VENDOR_DIAG_COORD_EID      2
+#define SC_VENDOR_DIAG_ERROR_EID      3
+
+#endif

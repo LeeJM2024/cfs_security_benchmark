@@ -1,0 +1,15 @@
+{
+  "suite": "ground_system",
+  "passed": true,
+  "case_count": 1,
+  "passed_case_count": 1,
+  "results": [
+    {
+      "scenario_id": "GS-005",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/artifacts/runs/20260803_142652_ground_system_all/gs005"
+    }
+  ]
+}

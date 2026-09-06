@@ -1,0 +1,120 @@
+{
+  "baseline": {
+    "periodic": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "sched": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 35,
+      "tick_enabled": 1,
+      "tick_sent": 35
+    }
+  },
+  "baseline_tick_delta": 0,
+  "before": {
+    "periodic": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "sched": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 3,
+      "tick_enabled": 1,
+      "tick_sent": 3
+    }
+  },
+  "disable_command": {
+    "command": "CFS BENCH_SCHED_DISABLE_TICK",
+    "ok": true
+  },
+  "disabled": {
+    "periodic": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "sched": {
+      "command": 1,
+      "error": 0,
+      "last_tick_sequence": 36,
+      "tick_enabled": 0,
+      "tick_sent": 36
+    }
+  },
+  "enable_command": {
+    "command": "CFS BENCH_SCHED_ENABLE_TICK",
+    "ok": true
+  },
+  "missed_delta": 0,
+  "ok": true,
+  "periodic_noop_after": {
+    "after": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "before": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "delta": 0,
+    "ok": false
+  },
+  "restored": {
+    "periodic": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "sched": {
+      "command": 2,
+      "error": 0,
+      "last_tick_sequence": 69,
+      "tick_enabled": 1,
+      "tick_sent": 69
+    }
+  },
+  "restored_tick_delta": 0,
+  "sched_noop_after": {
+    "after": {
+      "command": 3,
+      "error": 0,
+      "last_tick_sequence": 103,
+      "tick_enabled": 1,
+      "tick_sent": 103
+    },
+    "before": {
+      "command": 2,
+      "error": 0,
+      "last_tick_sequence": 103,
+      "tick_enabled": 1,
+      "tick_sent": 103
+    },
+    "delta": 1,
+    "ok": true
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "after_collection_count": 0,
+  "after_mode": 0,
+  "after_unauthorized": 0,
+  "attempted_command_logged": false,
+  "attempted_results": [],
+  "before_collection_count": 0,
+  "before_mode": 0,
+  "before_unauthorized": 0,
+  "collection_blocked": true,
+  "collection_delta": 0,
+  "command_sent_to_cfs": false,
+  "ground_policy": {
+    "attempted_sequence": [
+      "BENCH_PAYLOAD_START_COLLECTION"
+    ],
+    "blocked": true,
+    "enforcement_enabled": true,
+    "missing_before_critical": [
+      "BENCH_PAYLOAD_ARM",
+      "BENCH_PAYLOAD_ENABLE_HIGH_RATE"
+    ],
+    "required_sequence": [
+      "BENCH_PAYLOAD_ARM",
+      "BENCH_PAYLOAD_ENABLE_HIGH_RATE",
+      "BENCH_PAYLOAD_START_COLLECTION"
+    ],
+    "script_name": "GS-001 ground command script misuse",
+    "violation_detected": true
+  },
+  "ground_policy_blocked": true,
+  "mode_preserved": true,
+  "noop_after": {
+    "after": {
+      "armed": 0,
+      "collection_count": 0,
+      "command": 0,
+      "error": 0,
+      "high_rate": 0,
+      "last_accepted": 0,
+      "last_rejected": 0,
+      "mode": 0,
+      "unauthorized": 0
+    },
+    "before": {
+      "armed": 0,
+      "collection_count": 0,
+      "command": 0,
+      "error": 0,
+      "high_rate": 0,
+      "last_accepted": 0,
+      "last_rejected": 0,
+      "mode": 0,
+      "unauthorized": 0
+    },
+    "delta": 0,
+    "ok": false
+  },
+  "passed": false,
+  "payload_alive_after": false,
+  "rejected_by_payload_guard": false,
+  "scenario_id": "GS-001",
+  "script_violation_detected": true,
+  "unauthorized_delta": 0
+}

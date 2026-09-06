@@ -1,0 +1,45 @@
+{
+  "attack_error_after": 3,
+  "attack_error_before": 0,
+  "attack_error_delta": 3,
+  "attack_spoof_after": 0,
+  "attack_spoof_before": 0,
+  "attack_spoof_delta": 0,
+  "passed": true,
+  "passed_variant_count": 4,
+  "scenario_id": "SP-002",
+  "variant_count": 4,
+  "variants": [
+    {
+      "after": 1,
+      "before": 0,
+      "error_delta": 1,
+      "label": "attack_invalid_function_code",
+      "ok": true
+    },
+    {
+      "after": 2,
+      "before": 1,
+      "error_delta": 1,
+      "label": "attack_short_command_length",
+      "ok": true
+    },
+    {
+      "after": 3,
+      "before": 2,
+      "error_delta": 1,
+      "label": "attack_long_command_length",
+      "ok": true
+    },
+    {
+      "after": 1,
+      "before": 0,
+      "error_delta": 1,
+      "label": "victim_invalid_function_code",
+      "ok": true
+    }
+  ],
+  "victim_error_after": 1,
+  "victim_error_before": 0,
+  "victim_error_delta": 1
+}

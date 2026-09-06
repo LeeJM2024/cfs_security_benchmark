@@ -1,0 +1,165 @@
+id: GS-002
+name: Ground command dictionary pollution
+domain: ground_system
+description:
+  attack_entry: External ground benchmark runner modifies one mounted COSMOS runtime command dictionary, restarts CmdTlmServer, and releases an operator-looking command through the COSMOS API
+  affected_component: COSMOS/OpenC3 command dictionary and CmdTlmServer command-encoding path
+  cps_type: Ground command semantic integrity / spacecraft telecommand encoding boundary
+  security_consequence: A dictionary modification can make the command text shown to an operator encode a different, dangerous spacecraft telecommand
+  recovery_strategy: Restore the exact dictionary bytes, restart CmdTlmServer, then issue the legitimate recovery command for the affected spacecraft state
+  injection_method: External Python runner uses docker exec against the existing COSMOS operator container; it does not install a COSMOS procedure, cFS app, or benchmark target component
+attack:
+  type: command_dictionary_pollution
+  docker_container: cosmos-openc3-operator-1
+  command_server_port: 7777
+  command_server_root: /home/leejm/nos3/gsw/cosmos
+  cases:
+    - id: GS002-EPS-STATE-ENUM
+      status: validated
+      name: EPS switch-state enum semantic pollution
+      dictionary_path: /home/leejm/nos3/gsw/cosmos/COMPONENTS/GENERIC_EPS/cmd_tlm/GENERIC_EPS_CMD.txt
+      mutation:
+        original: "    STATE ON  0xAA\n"
+        replacement: "    STATE ON  0x00\n"
+      setup:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      telemetry_requests:
+        - GENERIC_EPS GENERIC_EPS_REQ_HK
+      telemetry:
+        cmd_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_COUNT
+        err_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_ERR_COUNT
+        switch0: GENERIC_EPS GENERIC_EPS_HK_TLM SWITCH_0_STATE
+      displayed_command: GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      expected_packet_hex_suffix: "0000"
+      effect:
+        type: equals
+        telemetry: switch0
+        expected_any: ["OFF", 0]
+      recovery:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      recovery_effect:
+        type: equals
+        telemetry: switch0
+        expected_any: ["ON", 170]
+
+    - id: GS002-ADCS-MODE-ENUM
+      status: validated
+      name: ADCS safe-mode label pollution
+      dictionary_path: /home/leejm/nos3/gsw/cosmos/COMPONENTS/GENERIC_ADCS/cmd_tlm/GENERIC_ADCS_CMD.txt
+      mutation:
+        original: "    STATE SUNSAFE_MODE            2\n"
+        replacement: "    STATE SUNSAFE_MODE            3\n"
+      setup:
+        - GENERIC_ADCS GENERIC_ADCS_SET_MODE_CC with GNC_MODE PASSIVE
+      telemetry_requests:
+        - GENERIC_ADCS GENERIC_ADCS_REQ_HK
+        - GENERIC_ADCS GENERIC_ADCS_SEND_GNC_CC
+      telemetry:
+        cmd_count: GENERIC_ADCS GENERIC_ADCS_HK_TLM CMD_COUNT
+        err_count: GENERIC_ADCS GENERIC_ADCS_HK_TLM CMD_ERR_COUNT
+        mode: GENERIC_ADCS GENERIC_ADCS_GNC MODE
+      displayed_command: GENERIC_ADCS GENERIC_ADCS_SET_MODE_CC with GNC_MODE SUNSAFE_MODE
+      expected_packet_hex_suffix: "03"
+      effect:
+        type: equals
+        telemetry: mode
+        expected_any: [INERTIAL, INERTIAL_MODE, 3]
+      recovery:
+        - GENERIC_ADCS GENERIC_ADCS_SET_MODE_CC with GNC_MODE PASSIVE
+      recovery_effect:
+        type: equals
+        telemetry: mode
+        expected_any: [PASSIVE, 0]
+
+    - id: GS002-RW-DEFAULT-TORQUE
+      status: validated
+      name: Reaction-wheel default torque pollution
+      dictionary_path: /home/leejm/nos3/gsw/cosmos/COMPONENTS/GENERIC_REACTION_WHEEL/cmd_tlm/GENERIC_REACTION_WHEEL_CMD.txt
+      mutation:
+        original: "  APPEND_PARAMETER TORQUE              16 INT  MIN_INT16 MAX_INT16 0        \"Torque to set in 10^-4 Newton-meters\" LITTLE_ENDIAN\n"
+        replacement: "  APPEND_PARAMETER TORQUE              16 INT  MIN_INT16 MAX_INT16 10       \"Torque to set in 10^-4 Newton-meters\" LITTLE_ENDIAN\n"
+      setup:
+        - GENERIC_REACTION_WHEEL GENERIC_RW_SET_TORQUE_CC with WHEEL_NUMBER 0, TORQUE 0
+      telemetry_requests:
+        - GENERIC_REACTION_WHEEL GENERIC_RW_REQ_DATA_CC
+      telemetry:
+        cmd_count: GENERIC_REACTION_WHEEL GENRW_HK_TLM_T COMMAND_COUNT
+        err_count: GENERIC_REACTION_WHEEL GENRW_HK_TLM_T ERROR_COUNT
+        momentum0: GENERIC_REACTION_WHEEL GENRW_HK_TLM_T MOMENTUM_NMS_0
+      displayed_command: GENERIC_REACTION_WHEEL GENERIC_RW_SET_TORQUE_CC with WHEEL_NUMBER 0
+      expected_packet_hex_suffix: "000a00"
+      effect:
+        type: changed
+        telemetry: momentum0
+        min_abs_delta: 0.000001
+      recovery:
+        - GENERIC_REACTION_WHEEL GENERIC_RW_SET_TORQUE_CC with WHEEL_NUMBER 0, TORQUE 0
+      recovery_effect:
+        type: command_only
+
+    - id: GS002-EPS-NOOP-IDENTITY
+      status: experimental
+      name: EPS NOOP command identity pollution
+      dictionary_path: /home/leejm/nos3/gsw/cosmos/COMPONENTS/GENERIC_EPS/cmd_tlm/GENERIC_EPS_CMD.txt
+      mutation:
+        original: |
+          COMMAND GENERIC_EPS GENERIC_EPS_NOOP_CC BIG_ENDIAN "Generic_eps NOOP Command"
+            APPEND_PARAMETER CCSDS_STREAMID      16 UINT MIN_UINT16 MAX_UINT16 0x191A "CCSDS Packet Identification" 
+            APPEND_PARAMETER CCSDS_SEQUENCE      16 UINT MIN_UINT16 MAX_UINT16 0xC000 "CCSDS Packet Sequence Control" 
+            APPEND_PARAMETER CCSDS_LENGTH        16 UINT MIN_UINT16 MAX_UINT16 1      "CCSDS Packet Data Length" 
+            APPEND_PARAMETER CCSDS_FC            8  UINT MIN_UINT8 MAX_UINT8 0        "CCSDS Command Function Code" 
+            APPEND_PARAMETER CCSDS_CHECKSUM      8  UINT MIN_UINT8 MAX_UINT8 0        "CCSDS Command Checksum"
+        replacement: |
+          COMMAND GENERIC_EPS GENERIC_EPS_NOOP_CC BIG_ENDIAN "Generic_eps NOOP Command"
+            APPEND_PARAMETER CCSDS_STREAMID      16 UINT MIN_UINT16 MAX_UINT16 0x191A "CCSDS Packet Identification" 
+            APPEND_PARAMETER CCSDS_SEQUENCE      16 UINT MIN_UINT16 MAX_UINT16 0xC000 "CCSDS Packet Sequence Control" 
+            APPEND_PARAMETER CCSDS_LENGTH        16 UINT MIN_UINT16 MAX_UINT16 3      "CCSDS Packet Data Length" 
+            APPEND_PARAMETER CCSDS_FC            8  UINT MIN_UINT8 MAX_UINT8 2        "CCSDS Command Function Code" 
+            APPEND_PARAMETER CCSDS_CHECKSUM      8  UINT MIN_UINT8 MAX_UINT8 0        "CCSDS Command Checksum"
+            APPEND_PARAMETER SWITCH_NUMBER       8  UINT 0x00 0x07 0                  "GS002 forced switch number"
+            APPEND_PARAMETER STATE               8  UINT 0x00 0xAA 0                  "GS002 forced switch state"
+              STATE OFF 0x00
+              STATE ON  0xAA
+      setup:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      telemetry_requests:
+        - GENERIC_EPS GENERIC_EPS_REQ_HK
+      telemetry:
+        cmd_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_COUNT
+        err_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_ERR_COUNT
+        switch0: GENERIC_EPS GENERIC_EPS_HK_TLM SWITCH_0_STATE
+      displayed_command: GENERIC_EPS GENERIC_EPS_NOOP_CC
+      expected_packet_hex_suffix: "0000"
+      effect:
+        type: equals
+        telemetry: switch0
+        expected_any: ["OFF", 0]
+      recovery:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      recovery_effect:
+        type: equals
+        telemetry: switch0
+        expected_any: ["ON", 170]
+metrics:
+  - per_case_dictionary_backup_hash
+  - per_case_exact_single_replacement
+  - per_case_restarted_command_server
+  - per_case_encoded_packet_hex
+  - per_case_target_command_counter_delta
+  - per_case_target_error_counter_delta
+  - per_case_real_effect_observed
+  - per_case_dictionary_restore_hash
+  - per_case_spacecraft_recovery_succeeded
+pass_criteria:
+  per_case_required:
+    external_runner_only: true
+    dictionary_backup_matches_after_restore: true
+    exact_dictionary_replacement_applied_once: true
+    command_server_restarted_after_mutation: true
+    command_buffer_reflects_polluted_encoding: true
+    displayed_command_sent_through_cosmos_api: true
+    target_command_counter_increments: true
+    target_error_counter_unchanged: true
+    real_case_specific_effect_observed: true
+    spacecraft_state_recovered_after_dictionary_restore: true
+notes: GS-002 passes when an operator-looking command is encoded according to a polluted runtime dictionary and causes the configured dangerous real effect. Experimental cases are opt-in until independently end-to-end validated.

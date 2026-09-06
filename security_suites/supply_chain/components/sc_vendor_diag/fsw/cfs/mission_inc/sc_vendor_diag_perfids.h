@@ -1,0 +1,6 @@
+#ifndef SC_VENDOR_DIAG_PERFIDS_H
+#define SC_VENDOR_DIAG_PERFIDS_H
+
+#define SC_VENDOR_DIAG_PERF_ID 110
+
+#endif

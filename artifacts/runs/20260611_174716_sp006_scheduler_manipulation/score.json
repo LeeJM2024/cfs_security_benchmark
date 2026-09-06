@@ -1,0 +1,90 @@
+{
+  "baseline": {
+    "periodic": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "sched": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 35,
+      "tick_enabled": 1,
+      "tick_sent": 35
+    }
+  },
+  "baseline_tick_delta": 0,
+  "baseline_tick_observed": false,
+  "before": {
+    "periodic": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "sched": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 3,
+      "tick_enabled": 1,
+      "tick_sent": 3
+    }
+  },
+  "disable_command": {
+    "command": "CFS BENCH_SCHED_DISABLE_TICK",
+    "ok": true
+  },
+  "disable_command_ok": true,
+  "disabled": {
+    "periodic": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "sched": {
+      "command": 1,
+      "error": 0,
+      "last_tick_sequence": 36,
+      "tick_enabled": 0,
+      "tick_sent": 36
+    }
+  },
+  "enable_command": {
+    "command": "CFS BENCH_SCHED_ENABLE_TICK",
+    "ok": true
+  },
+  "enable_command_ok": true,
+  "missed_deadline_observed": false,
+  "missed_delta": 0,
+  "passed": false,
+  "periodic_alive_after": false,
+  "recovery_tick_observed": false,
+  "restored": {
+    "periodic": {
+      "command": 0,
+      "error": 0,
+      "last_tick_sequence": 0,
+      "missed_deadline": 0,
+      "tick_healthy": 0,
+      "tick_received": 0
+    },
+    "sched": {
+      "command": 2,
+      "error": 0,
+      "last_tick_sequence": 69,
+      "tick_enabled": 1,
+      "tick_sent": 69
+    }
+  },
+  "restored_tick_delta": 0,
+  "scenario_id": "SP-006",
+  "sched_alive_after": true
+}

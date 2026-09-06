@@ -1,0 +1,137 @@
+id: GS-006
+name: Telemetry display and monitoring deception
+domain: ground_system
+description:
+  attack_entry: An external runner injects a captured-looking telemetry value into the existing COSMOS/OpenC3 telemetry path after a real spacecraft state change
+  affected_component: COSMOS/OpenC3 operator latest-value cache and the telemetry source-authenticity boundary used by the ground display
+  cps_type: Ground telemetry integrity / operator trust boundary
+  security_consequence: The operator display can show a replayed nominal state while the last fresh cFS telemetry response recorded before the injection showed a changed real state
+  recovery_strategy: Request fresh real telemetry to overwrite the replayed cache entry, then restore each affected subsystem to its configured baseline
+  injection_method: External Python runner invokes the existing COSMOS inject_tlm API with routers enabled and packet-log writers disabled; it does not install or modify cFS, target dictionaries, or COSMOS configuration
+attack:
+  type: telemetry_cache_replay
+  docker_container: cosmos-openc3-operator-1
+  cases:
+    - id: GS006-EPS-CACHE-REPLAY
+      name: EPS switch-state replay in operator cache
+      setup:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      telemetry_request: GENERIC_EPS GENERIC_EPS_REQ_HK
+      telemetry:
+        display: GENERIC_EPS GENERIC_EPS_HK_TLM SWITCH_0_STATE
+        cmd_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_COUNT
+        err_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_ERR_COUNT
+      expected_baseline:
+        converted_any: ["ON", 170]
+        raw_any: [170, "ON"]
+      real_command: GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE OFF
+      expected_real_state:
+        converted_any: ["OFF", 0]
+        raw_any: [0, "OFF"]
+      ground_cache_replay:
+        target: GENERIC_EPS
+        packet: GENERIC_EPS_HK_TLM
+        items:
+          SWITCH_0_STATE: "ON"
+      expected_replayed_view:
+        converted_any: ["ON", 170]
+      recovery:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+    - id: GS006-ADCS-MODE-REPLAY
+      name: ADCS mode replay in operator cache
+      setup:
+        - GENERIC_ADCS GENERIC_ADCS_SET_MODE_CC with GNC_MODE INERTIAL_MODE
+      telemetry_requests:
+        - GENERIC_ADCS GENERIC_ADCS_REQ_HK
+        - GENERIC_ADCS GENERIC_ADCS_SEND_GNC_CC
+      telemetry:
+        display: GENERIC_ADCS GENERIC_ADCS_GNC MODE
+        cmd_count: GENERIC_ADCS GENERIC_ADCS_HK_TLM CMD_COUNT
+        err_count: GENERIC_ADCS GENERIC_ADCS_HK_TLM CMD_ERR_COUNT
+      expected_baseline:
+        converted_any: ["INERTIAL", 3]
+        raw_any: [3, "INERTIAL"]
+      real_command: GENERIC_ADCS GENERIC_ADCS_SET_MODE_CC with GNC_MODE PASSIVE
+      expected_real_state:
+        converted_any: ["PASSIVE", 0]
+        raw_any: [0, "PASSIVE"]
+      ground_cache_replay:
+        target: GENERIC_ADCS
+        packet: GENERIC_ADCS_GNC
+        items:
+          MODE: "INERTIAL"
+      expected_replayed_view:
+        converted_any: ["INERTIAL", 3]
+      recovery:
+        - GENERIC_ADCS GENERIC_ADCS_SET_MODE_CC with GNC_MODE INERTIAL_MODE
+    - id: GS006-RW-ENABLE-STATE-REPLAY
+      name: Reaction-wheel enabled-state replay in operator cache
+      setup:
+        - GENERIC_REACTION_WHEEL GENERIC_RW_ENABLE_CC with WHEEL_NUMBER 0
+      telemetry_request: GENERIC_REACTION_WHEEL GENERIC_RW_REQ_DATA_CC
+      telemetry:
+        display: GENERIC_REACTION_WHEEL GENRW_HK_TLM_T DEVICE_ENABLED_RW0
+        cmd_count: GENERIC_REACTION_WHEEL GENRW_HK_TLM_T COMMAND_COUNT
+        err_count: GENERIC_REACTION_WHEEL GENRW_HK_TLM_T ERROR_COUNT
+      expected_baseline:
+        converted_any: [1]
+        raw_any: [1]
+      real_command: GENERIC_REACTION_WHEEL GENERIC_RW_DISABLE_CC with WHEEL_NUMBER 0
+      expected_real_state:
+        converted_any: [0]
+        raw_any: [0]
+      ground_cache_replay:
+        target: GENERIC_REACTION_WHEEL
+        packet: GENRW_HK_TLM_T
+        items_from_baseline:
+          DEVICE_ENABLED_RW0: converted
+      expected_replayed_view:
+        converted_equals_baseline: true
+      recovery:
+        - GENERIC_REACTION_WHEEL GENERIC_RW_ENABLE_CC with WHEEL_NUMBER 0
+    - id: GS006-EPS-FULL-SNAPSHOT-REPLAY
+      name: EPS related-field historical snapshot replay
+      setup:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      telemetry_request: GENERIC_EPS GENERIC_EPS_REQ_HK
+      telemetry:
+        display: GENERIC_EPS GENERIC_EPS_HK_TLM SWITCH_0_STATE
+        cmd_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_COUNT
+        err_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_ERR_COUNT
+      expected_baseline:
+        converted_any: ["ON", 170]
+        raw_any: [170, "ON"]
+      real_command: GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE OFF
+      expected_real_state:
+        converted_any: ["OFF", 0]
+        raw_any: [0, "OFF"]
+      ground_cache_replay:
+        target: GENERIC_EPS
+        packet: GENERIC_EPS_HK_TLM
+        items_from_baseline:
+          SWITCH_0_STATE: converted
+          CMD_COUNT: cmd_count
+          CMD_ERR_COUNT: err_count
+      expected_replayed_view:
+        converted_equals_baseline: true
+      recovery:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+metrics:
+  - real_command_counter_delta
+  - real_command_error_counter_delta
+  - fresh_pre_injection_converted_value
+  - fresh_pre_injection_raw_value
+  - injected_operator_view_value
+  - fresh_real_telemetry_reconciliation
+  - spacecraft_recovery_succeeded
+pass_criteria:
+  per_case_required:
+    real_state_change_command_sent_through_cosmos: true
+    target_command_counter_increments: true
+    target_error_counter_unchanged: true
+    fresh_real_telemetry_shows_changed_state_before_injection: true
+    replayed_sample_accepted_by_cosmos: true
+    operator_latest_value_matches_replayed_baseline: true
+    fresh_real_telemetry_restores_operator_value: true
+    target_subsystem_restored_to_baseline: true
+notes: GS-006 is a controlled ground-side cache/replay injection suite. It covers discrete EPS state, ADCS mode semantics, reaction-wheel enabled state, and a related-field EPS historical snapshot. The runner records the real changed observation before injecting the replay; after injection it reads only the operator-visible COSMOS latest value until a fresh real packet reconciles it. It intentionally does not claim an independent hardware tap and does not modify telemetry logs.

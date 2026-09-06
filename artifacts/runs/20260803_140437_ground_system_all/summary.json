@@ -1,0 +1,63 @@
+{
+  "suite": "ground_system",
+  "passed": false,
+  "case_count": 8,
+  "passed_case_count": 7,
+  "results": [
+    {
+      "scenario_id": "GS-001",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_140437_ground_system_all/gs001"
+    },
+    {
+      "scenario_id": "GS-002",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_140437_ground_system_all/gs002"
+    },
+    {
+      "scenario_id": "GS-003",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_140437_ground_system_all/gs003"
+    },
+    {
+      "scenario_id": "GS-004",
+      "status": "UNREGISTERED",
+      "passed": false,
+      "reason": "missing scenario definition: /home/leejm/Space OS/cfs-security-benchmark/security_suites/ground_system/scenarios/ground_configuration_pollution.yaml"
+    },
+    {
+      "scenario_id": "GS-005",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_140437_ground_system_all/gs005"
+    },
+    {
+      "scenario_id": "GS-006",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_140437_ground_system_all/gs006"
+    },
+    {
+      "scenario_id": "GS-007",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_140437_ground_system_all/gs007"
+    },
+    {
+      "scenario_id": "GS-008",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_140437_ground_system_all/gs008"
+    }
+  ]
+}

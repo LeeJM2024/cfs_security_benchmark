@@ -1,0 +1,8 @@
+#ifndef _SP008_STATE_SPOOF_MSGIDS_H_
+#define _SP008_STATE_SPOOF_MSGIDS_H_
+
+#define SP008_CMD_MID    0x19FA
+#define SP008_REQ_HK_MID 0x19FB
+#define SP008_HK_TLM_MID 0x09FA
+
+#endif

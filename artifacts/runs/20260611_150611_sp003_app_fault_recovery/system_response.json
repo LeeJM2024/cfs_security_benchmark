@@ -1,0 +1,149 @@
+{
+  "es_alive_after": {
+    "after": 0,
+    "before": 0,
+    "delta": 0,
+    "ok": false
+  },
+  "fault_command": {
+    "command": "CFS BENCH_VICTIM_INJECT_FAULT",
+    "ok": true
+  },
+  "ok": true,
+  "post_fault_alive": {
+    "backtrace": [
+      "/usr/lib/ruby/2.5.0/socket.rb:456:in `__write_nonblock'",
+      "/usr/lib/ruby/2.5.0/socket.rb:456:in `write_nonblock'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:83:in `block in write'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `loop'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `write'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/udp_interface.rb:150:in `write_interface'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:258:in `block in write'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:289:in `block in _write'"
+    ],
+    "blocked": true,
+    "error": "Connection refused - Connection refused",
+    "error_class": "Errno::ECONNREFUSED",
+    "label": "post_fault_alive",
+    "ok": false
+  },
+  "post_fault_query": {
+    "app_filename": "",
+    "app_name": "",
+    "command": "CFS CFE_ES_QUERY_ONE with APPLICATION BENCH_VICTIM",
+    "entrypoint": "",
+    "errors": null,
+    "execution_counter": 0,
+    "ok": true
+  },
+  "post_recovery_alive": {
+    "backtrace": [
+      "/usr/lib/ruby/2.5.0/socket.rb:456:in `__write_nonblock'",
+      "/usr/lib/ruby/2.5.0/socket.rb:456:in `write_nonblock'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:83:in `block in write'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `loop'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `write'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/udp_interface.rb:150:in `write_interface'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:258:in `block in write'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:289:in `block in _write'"
+    ],
+    "blocked": true,
+    "error": "Connection refused - Connection refused",
+    "error_class": "Errno::ECONNREFUSED",
+    "label": "after_start_app",
+    "ok": false
+  },
+  "post_recovery_query": {
+    "app_filename": "",
+    "app_name": "",
+    "command": null,
+    "entrypoint": "",
+    "errors": [
+      {
+        "command": "CFS CFE_ES_QUERY_ONE with APPLICATION BENCH_VICTIM",
+        "error": "Interface not connected for write: DEBUG",
+        "error_class": "RuntimeError"
+      },
+      {
+        "command": "CFE CFE_ES_QUERY_ONE with APPLICATION BENCH_VICTIM",
+        "error": "Command target 'CFE' does not exist",
+        "error_class": "RuntimeError"
+      }
+    ],
+    "execution_counter": 0,
+    "ok": false
+  },
+  "pre_fault_alive": {
+    "after": {
+      "command": 1,
+      "error": 0,
+      "spoof_received": 0
+    },
+    "before": {
+      "command": 0,
+      "error": 0,
+      "spoof_received": 0
+    },
+    "blocked": false,
+    "delta": 1,
+    "label": "pre_fault_alive",
+    "ok": true
+  },
+  "pre_query": {
+    "app_filename": "",
+    "app_name": "",
+    "command": "CFS CFE_ES_QUERY_ONE with APPLICATION BENCH_VICTIM",
+    "entrypoint": "",
+    "errors": null,
+    "execution_counter": 0,
+    "ok": true
+  },
+  "recovery": {
+    "errors": [
+      {
+        "command": "CFS CFE_ES_START_APP with APPLICATION BENCH_VICTIM, APPENTRYPOINT BENCH_VIC_AppMain, APPFILENAME /cf/bench_victim.so, STACKSIZE 32768, EXCEPTIONACTION 0, PRIORITY 77",
+        "error": "Interface not connected for write: DEBUG",
+        "error_class": "RuntimeError"
+      },
+      {
+        "command": "CFE CFE_ES_START_APP with APPLICATION BENCH_VICTIM, APPENTRYPOINT BENCH_VIC_AppMain, APPFILENAME /cf/bench_victim.so, STACKSIZE 32768, EXCEPTIONACTION 0, PRIORITY 77",
+        "error": "Command target 'CFE' does not exist",
+        "error_class": "RuntimeError"
+      }
+    ],
+    "method": "start_app",
+    "ok": false,
+    "probe": {
+      "backtrace": [
+        "/usr/lib/ruby/2.5.0/socket.rb:456:in `__write_nonblock'",
+        "/usr/lib/ruby/2.5.0/socket.rb:456:in `write_nonblock'",
+        "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:83:in `block in write'",
+        "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `loop'",
+        "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `write'",
+        "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/udp_interface.rb:150:in `write_interface'",
+        "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:258:in `block in write'",
+        "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:289:in `block in _write'"
+      ],
+      "blocked": true,
+      "error": "Connection refused - Connection refused",
+      "error_class": "Errno::ECONNREFUSED",
+      "label": "after_start_app",
+      "ok": false
+    },
+    "restart_attempt": {
+      "errors": [
+        {
+          "command": "CFS CFE_ES_RESTART_APP with APPLICATION BENCH_VICTIM",
+          "error": "Interface not connected for write: DEBUG",
+          "error_class": "RuntimeError"
+        },
+        {
+          "command": "CFE CFE_ES_RESTART_APP with APPLICATION BENCH_VICTIM",
+          "error": "Command target 'CFE' does not exist",
+          "error_class": "RuntimeError"
+        }
+      ],
+      "ok": false
+    }
+  }
+}

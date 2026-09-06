@@ -1,0 +1,29 @@
+schema_version: 1
+release_id: sc-art-001-sp004-table-release-v1
+profile_id: SC-ART-001
+artifact_type: flight_table_release
+supplier_id: benchmark-malicious-supplier
+version: 1.0.0
+issued_at: '2026-08-10T00:00:00Z'
+status: released
+compatibility: {nos3: local, cfs: nos3-cfs}
+content:
+  - {source: security_suites/space_platform/injections/sp004_table_tamper/components/sp004_table_tamper, sha256: dc288624958c15cfb8d20004d18bcbfa523e760d6a9ff0ec6b27700195a11249}
+  - {source: security_suites/space_platform/injections/sp004_table_tamper/components/sp004_table_tamper/fsw/cfs/tables, sha256: 14d2211bfee10276efd3572d6b3bcb3b226e891f51626abad6083bbcd3d29cd5}
+  - {source: security_suites/space_platform/injections/sp004_table_tamper/sp004_verify.rb, sha256: 6662fb07a12c1ead671aa319ff4006dd17bc7ffae7cc14facdb4658b4b0f7cec}
+  - {source: security_suites/space_platform/injections/sp004_table_tamper/gsw/cosmos/cmd_tlm/SP004_TABLE_TAMPER.txt, sha256: 9bc5f7589b708d267847738cc6ad0b89f5850eb2d47f946d59a5a272a9f6e70b}
+operations:
+  - {type: copy_tree, source: security_suites/space_platform/injections/sp004_table_tamper/components/sp004_table_tamper, target: components/sp004_table_tamper, sha256: dc288624958c15cfb8d20004d18bcbfa523e760d6a9ff0ec6b27700195a11249}
+  - {type: copy_tree_contents, source: security_suites/space_platform/injections/sp004_table_tamper/components/sp004_table_tamper/fsw/cfs/tables, target: cfg/nos3_defs/tables, sha256: 14d2211bfee10276efd3572d6b3bcb3b226e891f51626abad6083bbcd3d29cd5}
+  - {type: cmake_add_mission_app, target: cfg/nos3_defs/targets.cmake, component: sp004_table_tamper/fsw/cfs}
+  - {type: text_replace, target: cfg/nos3_defs/cpu1_platform_cfg.h, original: '#define CFE_PLATFORM_ES_MAX_APPLICATIONS 48', replacement: '#define CFE_PLATFORM_ES_MAX_APPLICATIONS 50'}
+  - {type: copy_file, source: security_suites/space_platform/injections/sp004_table_tamper/sp004_verify.rb, target: gsw/cosmos/config/targets/MISSION/procedures/sp004_verify.rb, sha256: 6662fb07a12c1ead671aa319ff4006dd17bc7ffae7cc14facdb4658b4b0f7cec}
+  - {type: copy_file, source: security_suites/space_platform/injections/sp004_table_tamper/gsw/cosmos/cmd_tlm/SP004_TABLE_TAMPER.txt, target: gsw/cosmos/config/targets/CFS/cmd_tlm/SP004_TABLE_TAMPER.txt, sha256: 9bc5f7589b708d267847738cc6ad0b89f5850eb2d47f946d59a5a272a9f6e70b}
+  - {type: copy_file, source: security_suites/space_platform/injections/sp004_table_tamper/gsw/cosmos/cmd_tlm/SP004_TABLE_TAMPER.txt, target: gsw/cosmos/outputs/tmp/config/targets/CFS/cmd_tlm/SP004_TABLE_TAMPER.txt, sha256: 9bc5f7589b708d267847738cc6ad0b89f5850eb2d47f946d59a5a272a9f6e70b}
+lifecycle:
+  adapter: sp004
+  sp004_only: fm_freespace_table_disable_all
+  requires_build_relaunch: true
+  requires_operator_reload: false
+  verifier: security_suites/space_platform/injections/sp004_table_tamper/sp004_verify.rb
+signature: {algorithm: HMAC-SHA256, key_id: sc-local-fixture-2026, value: 680621d2fd68e02fe744f6b27378ef8bff95c6ee6f7b6dd8b765e17cc6781406}

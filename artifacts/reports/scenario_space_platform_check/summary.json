@@ -1,0 +1,285 @@
+{
+  "title": "cFS/NOS3 space_platform Security Benchmark Scenario Index",
+  "scenario_count": 8,
+  "scenarios": [
+    {
+      "id": "SP-003",
+      "name": "cFS app crash and restart pressure",
+      "domain": "space_platform",
+      "description": {
+        "attack_entry": "Space platform app runtime / cFE Executive Services",
+        "affected_component": "cFS app process, cFE ES restart and exception handling",
+        "cps_type": "Controller",
+        "security_consequence": "A faulty or malicious app can crash repeatedly and reduce availability of mission functions",
+        "recovery_strategy": "App restart limits, health monitoring, memory protection, cFE/FSW respawn or safe mode after repeated faults",
+        "injection_method": "Send BENCH_VICTIM_INJECT_FAULT through COSMOS/CI, let the cFS app exit with APP_ERROR, then observe cFE/FSW recovery and BENCH_VICTIM telemetry returning"
+      },
+      "attack": {
+        "type": "app_crash",
+        "app_name": "BENCH_VICTIM",
+        "fault_type": "controlled_app_error_exit",
+        "restart_policy": "cfe_fsw_respawn",
+        "count": 1,
+        "interval_ms": 500
+      },
+      "metrics": [
+        "app_fault_injected",
+        "victim_unresponsive_after_fault",
+        "automatic_fsw_recovery",
+        "victim_responsive_after_recovery"
+      ],
+      "pass_criteria": {
+        "require_pre_fault_hk_response": true,
+        "require_post_fault_noop_blocked": true,
+        "require_post_recovery_hk_response": true
+      },
+      "notes": "Live mode uses the benchmark cFS app pair installed into NOS3; dry mode still emits the scenario artifact for documentation."
+    },
+    {
+      "id": "SP-002",
+      "name": "Malformed TC parser and command handler input",
+      "domain": "space_platform",
+      "description": {
+        "attack_entry": "Space platform TC parser / command handler boundary",
+        "affected_component": "CI, cFE command dispatcher, app command handlers",
+        "cps_type": "Controller",
+        "security_consequence": "Malformed or dangerous command input can trigger error paths, invalid command handling, or parser faults",
+        "recovery_strategy": "Strict packet validation, command length checks, function code allowlists, error counter monitoring",
+        "injection_method": "In dry-run mode generate malformed TC payload bytes; in live mode send malformed BENCH_ATTACK/BENCH_VICTIM commands through COSMOS/CI and verify cFS command error counters increase while spoof delivery is blocked"
+      },
+      "attack": {
+        "type": "malformed_tc",
+        "stream_id": 6150,
+        "function_code": 255,
+        "declared_length": 65535,
+        "actual_length": 8,
+        "count": 4,
+        "interval_ms": 200
+      },
+      "metrics": [
+        "malformed_tc_generated",
+        "command_error_expected",
+        "event_log",
+        "attack_command_error_delta",
+        "victim_command_error_delta",
+        "attack_spoof_delta"
+      ],
+      "pass_criteria": {
+        "min_attack_events": 1,
+        "required_rejected_variants": 4,
+        "attack_spoof_delta_equals": 0
+      },
+      "notes": "Focuses on parser and handler robustness rather than RF-link transport behavior."
+    },
+    {
+      "id": "SP-005",
+      "name": "Payload critical interface abuse",
+      "domain": "space_platform",
+      "description": {
+        "attack_entry": "Space platform payload or PDHS interface",
+        "affected_component": "BENCH_PAYLOAD app, PDHS boundary, bus-payload link",
+        "cps_type": "Controller",
+        "security_consequence": "Unauthorized payload commands can trigger unsafe collection modes or unexpected data movement",
+        "recovery_strategy": "Payload command authorization, critical-command confirmation, interface rate limits",
+        "injection_method": "In dry-run mode generate a critical payload command artifact; in live mode send BENCH_PAYLOAD_START_COLLECTION without arming and verify the cFS payload guard rejects it"
+      },
+      "attack": {
+        "type": "payload_interface_abuse",
+        "payload_name": "BENCH_PAYLOAD",
+        "command_sequence": [
+          "START_COLLECTION"
+        ],
+        "count": 1
+      },
+      "metrics": [
+        "payload_command_generated",
+        "critical_interface_touched",
+        "unauthorized_command_delta",
+        "collection_start_delta",
+        "payload_mode"
+      ],
+      "pass_criteria": {
+        "min_attack_events": 1,
+        "unauthorized_command_delta_at_least": 1,
+        "collection_start_delta_equals": 0,
+        "expected_payload_mode": "STANDBY"
+      },
+      "notes": "Live execution models a legal-format but unauthorized critical payload command and expects the payload state-machine guard to reject it."
+    },
+    {
+      "id": "SP-007",
+      "name": "OBSW runtime resource exhaustion",
+      "domain": "space_platform",
+      "description": {
+        "attack_entry": "Space platform OS/runtime resource boundary",
+        "affected_component": "cFS Software Bus, BENCH_ATTACK, BENCH_VICTIM, app runtime",
+        "cps_type": "Controller",
+        "security_consequence": "Resource pressure can starve flight software tasks or prevent logging and recovery actions",
+        "recovery_strategy": "Resource quotas, app isolation, event throttling, watchdog recovery, safe mode",
+        "injection_method": "In dry-run mode generate a pressure plan; in live mode trigger bounded BENCH_ATTACK Software Bus flood and validate recovery by HK/NOOP telemetry"
+      },
+      "attack": {
+        "type": "resource_exhaustion",
+        "resource": "software_bus_queue",
+        "estimated_rate_per_second": 128,
+        "payload_size": 16,
+        "count": 128,
+        "interval_ms": 0
+      },
+      "metrics": [
+        "resource_pressure_planned",
+        "throttling_expected",
+        "flood_sent_delta",
+        "victim_received_delta",
+        "post_attack_noop_response"
+      ],
+      "pass_criteria": {
+        "min_attack_events": 1
+      },
+      "notes": "Live execution is opt-in and bounded; it should demonstrate pressure and post-attack recovery without intentionally crashing NOS3."
+    },
+    {
+      "id": "SP-006",
+      "name": "Scheduler manipulation and timing disruption",
+      "domain": "space_platform",
+      "description": {
+        "attack_entry": "Benchmark scheduler control command path",
+        "affected_component": "BENCH_SCHED app, BENCH_PERIODIC telemetry model, Software Bus tick message",
+        "cps_type": "Controller",
+        "security_consequence": "Missed or reordered periodic tasks can cause stale telemetry, delayed control, or watchdog pressure",
+        "recovery_strategy": "Schedule table validation, watchdogs, missed-deadline telemetry, fallback schedules",
+        "injection_method": "Live cFS benchmark scheduler app disables a Software Bus tick, periodic task reports missed deadlines through HK telemetry"
+      },
+      "attack": {
+        "type": "scheduler_manipulation",
+        "scheduler_app": "BENCH_SCHED",
+        "periodic_telemetry": "BENCH_PERIODIC_HKPACKET",
+        "action": "disable_tick_then_restore",
+        "tick_mid": "BENCH_SCHED_TICK_MID"
+      },
+      "metrics": [
+        "baseline_tick_received_delta",
+        "missed_deadline_delta",
+        "restored_tick_received_delta",
+        "post_attack_noop_health"
+      ],
+      "pass_criteria": {
+        "min_baseline_tick_delta": 1,
+        "min_missed_deadline_delta": 1,
+        "min_restored_tick_delta": 1
+      },
+      "notes": "Stable verifiable version. It models scheduler manipulation with one benchmark cFS app that exposes scheduler and periodic-task telemetry before replacing the injected control path with real SCH table edits."
+    },
+    {
+      "id": "SP-001",
+      "name": "Software Bus spoofed internal message",
+      "domain": "space_platform",
+      "description": {
+        "attack_entry": "Space platform internal interface / cFS Software Bus",
+        "affected_component": "cFE SB, subscribed cFS apps, mission application message handlers",
+        "cps_type": "Controller",
+        "security_consequence": "A malicious or compromised app can impersonate an internal publisher and drive unsafe app behavior",
+        "recovery_strategy": "Message authorization, app isolation, message ID allowlists, event monitoring, safe mode triggers",
+        "injection_method": "In dry-run mode generate a spoofed SB message artifact; in live mode send BENCH_ATTACK_SEND_SPOOF through COSMOS/CI and verify BENCH_VICTIM receives BENCH_SPOOF_INTERNAL_MID through cFE SB telemetry"
+      },
+      "attack": {
+        "type": "software_bus_spoof",
+        "message_id": 6272,
+        "publisher": "attacker_app",
+        "subscriber": "target_app",
+        "payload_text": "SPOOFED_SB_PAYLOAD",
+        "count": 3,
+        "interval_ms": 250
+      },
+      "metrics": [
+        "software_bus_message_spoofed",
+        "artifact_written",
+        "event_log",
+        "bench_attack_spoof_sent_delta",
+        "bench_victim_spoof_received_delta",
+        "last_payload_word"
+      ],
+      "pass_criteria": {
+        "min_attack_events": 1,
+        "min_victim_spoof_received_delta": 1
+      },
+      "notes": "Live execution requires the bench_spoof cFS apps installed into NOS3 startup and TO telemetry tables."
+    },
+    {
+      "id": "SP-008",
+      "name": "Satellite subsystem state spoofing",
+      "domain": "space_platform",
+      "description": {
+        "attack_entry": "Benchmark subsystem state command path",
+        "affected_component": "EPS state model, subsystem telemetry consumer, plausibility monitor",
+        "cps_type": "Sensor / actuator / physical state",
+        "security_consequence": "Spoofed subsystem state can mislead control logic or mission operations decisions",
+        "recovery_strategy": "Redundant sensing, state estimation, plausibility checks, cross-subsystem consistency checks",
+        "injection_method": "Live cFS benchmark app publishes plausible and spoofed EPS states, then reports plausibility failures through HK telemetry"
+      },
+      "attack": {
+        "type": "subsystem_state_spoof",
+        "subsystem": "EPS",
+        "baseline_state": {
+          "battery_soc_pct": 70,
+          "solar_input_w": 1200,
+          "load_current_ma": 500,
+          "battery_voltage_mv": 28000
+        },
+        "spoofed_state": {
+          "battery_soc_pct": 99,
+          "solar_input_w": 0,
+          "load_current_ma": 1800,
+          "battery_voltage_mv": 28500
+        }
+      },
+      "metrics": [
+        "spoofed_state_delta",
+        "plausibility_error_delta",
+        "state_trusted_flag",
+        "post_attack_noop_health"
+      ],
+      "pass_criteria": {
+        "min_spoofed_state_delta": 1,
+        "min_plausibility_error_delta": 1,
+        "expected_state_trusted_after_spoof": 0
+      },
+      "notes": "Stable verifiable version. It models subsystem state spoofing inside the benchmark cFS app before replacing the injected state source with a real NOS3 subsystem simulator path."
+    },
+    {
+      "id": "SP-004",
+      "name": "Table and configuration tampering",
+      "domain": "space_platform",
+      "description": {
+        "attack_entry": "Space platform table/configuration interface",
+        "affected_component": "cFE TBL, mission app configuration tables, control parameters",
+        "cps_type": "Controller",
+        "security_consequence": "Modified configuration can shift thresholds, disable checks, or change control behavior",
+        "recovery_strategy": "Table validation, checksums, signed uploads, rollback to known-good tables",
+        "injection_method": "In dry-run mode generate a tampered table artifact; in live mode load /cf/bench_bad.tbl through cFE TBL commands and verify BENCH_VICTIM validation rejects the active table update"
+      },
+      "attack": {
+        "type": "table_tamper",
+        "table_name": "BENCH_CONTROL_TABLE",
+        "parameter": "max_actuator_duty_cycle",
+        "original_value": 0.75,
+        "tampered_value": 1.25,
+        "count": 1
+      },
+      "metrics": [
+        "table_parameter_tampered",
+        "artifact_written",
+        "event_log",
+        "table_validation_failure_delta",
+        "active_table_value_preserved",
+        "table_update_count"
+      ],
+      "pass_criteria": {
+        "min_attack_events": 1,
+        "expected_active_duty_bps": 7500,
+        "expected_tampered_duty_bps_rejected": 12500
+      },
+      "notes": "Live execution uses cFE TBL validation and BENCH_VICTIM HK telemetry as the primary evidence path."
+    }
+  ]
+}

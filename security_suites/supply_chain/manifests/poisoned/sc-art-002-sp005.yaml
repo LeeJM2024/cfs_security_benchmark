@@ -1,0 +1,23 @@
+schema_version: 1
+release_id: sc-art-002-component-config-release-v1
+profile_id: SC-ART-002
+artifact_type: component_configuration_release
+supplier_id: benchmark-malicious-supplier
+version: 1.0.0
+issued_at: '2026-08-10T00:00:00Z'
+status: released
+compatibility: {nos3: local, cfs: nos3-cfs}
+content:
+  - {source: security_suites/space_platform/injections/sp005_component_config_pollution/sp005_verify.rb, sha256: aa6fbb3166a34cf5fea06ad99665fa50e1296f10154213885d29e1a9bbaaaede}
+  - {source: security_suites/space_platform/injections/sp005_component_config_pollution/sp005_profiles.json, sha256: 4a2eb5732b901364d95c0826c840f73526a6be675bec8139163fce4f16c0e8cb}
+operations:
+  - {type: text_replace, target: components/generic_adcs/fsw/shared/cfg/Inp_ADAC.txt, original: '1.42', replacement: '0.10'}
+  - {type: copy_file, source: security_suites/space_platform/injections/sp005_component_config_pollution/sp005_verify.rb, target: gsw/cosmos/config/targets/MISSION/procedures/sp005_verify.rb, sha256: aa6fbb3166a34cf5fea06ad99665fa50e1296f10154213885d29e1a9bbaaaede}
+  - {type: copy_file, source: security_suites/space_platform/injections/sp005_component_config_pollution/sp005_profiles.json, target: gsw/cosmos/config/targets/MISSION/procedures/sp005_profiles.json, sha256: 4a2eb5732b901364d95c0826c840f73526a6be675bec8139163fce4f16c0e8cb}
+lifecycle:
+  adapter: sp005
+  sp005_profile: adcs_magtorquer_saturation_low
+  requires_build_relaunch: true
+  requires_operator_reload: false
+  verifier: security_suites/space_platform/injections/sp005_component_config_pollution/sp005_verify.rb
+signature: {algorithm: HMAC-SHA256, key_id: sc-local-fixture-2026, value: 3fa2265356dd785121cbe47279a2cd813a6f9972d7f6088ff7d1de43614cc2fc}

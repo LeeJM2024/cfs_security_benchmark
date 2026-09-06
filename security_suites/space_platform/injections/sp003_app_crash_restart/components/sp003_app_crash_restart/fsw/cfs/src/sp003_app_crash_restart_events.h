@@ -1,0 +1,14 @@
+#ifndef _SP003_APP_CRASH_RESTART_EVENTS_H_
+#define _SP003_APP_CRASH_RESTART_EVENTS_H_
+
+#define SP003_STARTUP_INF_EID       1
+#define SP003_CMD_INF_EID           2
+#define SP003_CMD_ERR_EID           3
+#define SP003_PROFILE_INF_EID       4
+#define SP003_PROFILE_ERR_EID       5
+#define SP003_RUNTIME_WARN_EID      6
+#define SP003_RUNTIME_ERR_EID       7
+#define SP003_PRESSURE_INF_EID      8
+#define SP003_STARTUP_FAULT_INF_EID 9
+
+#endif

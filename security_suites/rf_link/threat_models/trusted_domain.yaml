@@ -1,0 +1,9 @@
+id: trusted-domain
+name: Ground trusted-domain attack model
+supported_links:
+  - debug
+  - radio
+payload_format: ccsds_plaintext
+rf001:
+  attack_success_if: business_plaintext_observed
+notes: The attacker is placed at a COSMOS or CryptoLib business-side interface. Existing UDP interception behavior belongs to this model.

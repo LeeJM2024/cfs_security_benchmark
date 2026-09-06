@@ -1,0 +1,17 @@
+#ifndef _SP007_RESOURCE_EXHAUSTION_EVENTS_H_
+#define _SP007_RESOURCE_EXHAUSTION_EVENTS_H_
+
+#define SP007_STARTUP_INF_EID       1
+#define SP007_CMD_INF_EID           2
+#define SP007_CMD_ERR_EID           3
+#define SP007_RUNTIME_ERR_EID       4
+#define SP007_PROFILE_INF_EID       5
+#define SP007_PROFILE_ERR_EID       6
+#define SP007_CLEANUP_INF_EID       7
+#define SP007_WORKER_INF_EID        8
+#define SP007_WORKER_ERR_EID        9
+
+#define SP007_EVS_STORM_BASE_EID    40
+#define SP007_EVS_STORM_EVENT_COUNT 8
+
+#endif

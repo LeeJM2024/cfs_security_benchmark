@@ -1,0 +1,80 @@
+{
+  "after_flood_attempt": 0,
+  "after_flood_sent": 0,
+  "after_flood_tx_error": 0,
+  "attack_command": {},
+  "attack_noop_after": {
+    "after": {
+      "command": 1,
+      "error": 0,
+      "flood_attempt": 0,
+      "flood_sent": 0,
+      "flood_tx_error": 0,
+      "last_flood_count": 0,
+      "last_payload_word": 0,
+      "spoof_sent": 0
+    },
+    "before": {
+      "command": 0,
+      "error": 0,
+      "flood_attempt": 0,
+      "flood_sent": 0,
+      "flood_tx_error": 0,
+      "last_flood_count": 0,
+      "last_payload_word": 0,
+      "spoof_sent": 0
+    },
+    "delta": 1,
+    "ok": true
+  },
+  "before_flood_attempt": 0,
+  "before_flood_sent": 0,
+  "before_flood_tx_error": 0,
+  "command_attempted": false,
+  "command_sent_to_cfs": false,
+  "dictionary_accepts_value": true,
+  "flood_attempt_delta": 0,
+  "flood_sent_delta": 0,
+  "flood_tx_error_delta": 0,
+  "ground_parameter_check_result": "blocked",
+  "ground_policy_blocked": true,
+  "last_flood_count": 0,
+  "last_flood_count_matches": false,
+  "parameter_policy": {
+    "blocked": true,
+    "command": "BENCH_ATTACK_RESOURCE_FLOOD",
+    "dictionary_accepts_value": true,
+    "dictionary_max": 4096,
+    "dictionary_min": 1,
+    "enforcement_enabled": true,
+    "operational_max": 512,
+    "parameter": "COUNT",
+    "parameter_risk_detected": true,
+    "script_name": "GS-003 command parameter boundary abuse",
+    "unsafe_value": 4096
+  },
+  "parameter_reached_cfs": false,
+  "parameter_risk_detected": true,
+  "passed": true,
+  "post_attempt_attack_health": true,
+  "post_attempt_victim_health": true,
+  "scenario_id": "GS-003",
+  "victim_noop_after": {
+    "after": {
+      "command": 1,
+      "error": 0,
+      "last_payload_word": 0,
+      "last_sequence": 0,
+      "spoof_received": 0
+    },
+    "before": {
+      "command": 0,
+      "error": 0,
+      "last_payload_word": 0,
+      "last_sequence": 0,
+      "spoof_received": 0
+    },
+    "delta": 1,
+    "ok": true
+  }
+}

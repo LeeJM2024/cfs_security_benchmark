@@ -1,0 +1,97 @@
+{
+  "attack_after": {
+    "command": 0,
+    "error": 0,
+    "flood_attempt": 0,
+    "flood_sent": 0,
+    "flood_tx_error": 0,
+    "last_flood_count": 0,
+    "last_payload_word": 0,
+    "spoof_sent": 0
+  },
+  "attack_before": {
+    "command": 0,
+    "error": 0,
+    "flood_attempt": 0,
+    "flood_sent": 0,
+    "flood_tx_error": 0,
+    "last_flood_count": 0,
+    "last_payload_word": 0,
+    "spoof_sent": 0
+  },
+  "attack_command": null,
+  "attack_noop_after": {
+    "after": {
+      "command": 1,
+      "error": 0,
+      "flood_attempt": 0,
+      "flood_sent": 0,
+      "flood_tx_error": 0,
+      "last_flood_count": 0,
+      "last_payload_word": 0,
+      "spoof_sent": 0
+    },
+    "before": {
+      "command": 0,
+      "error": 0,
+      "flood_attempt": 0,
+      "flood_sent": 0,
+      "flood_tx_error": 0,
+      "last_flood_count": 0,
+      "last_payload_word": 0,
+      "spoof_sent": 0
+    },
+    "delta": 1,
+    "ok": true
+  },
+  "flood_attempt_delta": 0,
+  "flood_sent_delta": 0,
+  "flood_tx_error_delta": 0,
+  "ok": true,
+  "parameter_policy": {
+    "blocked": true,
+    "command": "BENCH_ATTACK_RESOURCE_FLOOD",
+    "dictionary_accepts_value": true,
+    "dictionary_max": 4096,
+    "dictionary_min": 1,
+    "enforcement_enabled": true,
+    "operational_max": 512,
+    "parameter": "COUNT",
+    "parameter_risk_detected": true,
+    "script_name": "GS-003 command parameter boundary abuse",
+    "unsafe_value": 4096
+  },
+  "victim_after": {
+    "command": 0,
+    "error": 0,
+    "last_payload_word": 0,
+    "last_sequence": 0,
+    "spoof_received": 0
+  },
+  "victim_before": {
+    "command": 1,
+    "error": 0,
+    "last_payload_word": 1194336307,
+    "last_sequence": 4093,
+    "spoof_received": 2258
+  },
+  "victim_noop_after": {
+    "after": {
+      "command": 1,
+      "error": 0,
+      "last_payload_word": 0,
+      "last_sequence": 0,
+      "spoof_received": 0
+    },
+    "before": {
+      "command": 0,
+      "error": 0,
+      "last_payload_word": 0,
+      "last_sequence": 0,
+      "spoof_received": 0
+    },
+    "delta": 1,
+    "ok": true
+  },
+  "victim_received_delta": 0
+}

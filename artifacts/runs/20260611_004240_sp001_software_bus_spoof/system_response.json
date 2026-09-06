@@ -1,0 +1,11 @@
+{
+  "attack_sent_after": 1,
+  "attack_sent_before": 0,
+  "count": 1,
+  "last_payload_word": 3735928559,
+  "last_sequence": 1,
+  "ok": true,
+  "payload_word": 3735928559,
+  "victim_after": 1,
+  "victim_before": 0
+}

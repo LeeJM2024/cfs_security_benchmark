@@ -1,0 +1,6 @@
+#ifndef SC_VENDOR_NAV_PERFIDS_H
+#define SC_VENDOR_NAV_PERFIDS_H
+
+#define SC_VENDOR_NAV_PERF_ID 109
+
+#endif

@@ -1,0 +1,62 @@
+suite_id: SC-APP
+name: Supply-chain malicious application architecture matrix
+domain: supply_chain
+carrier: cfs_application
+real_integration:
+  source_root: /home/leejm/Space OS/cfs-security-benchmark/security_suites/supply_chain/components
+  target_root: /home/leejm/nos3/components
+  targets_file: /home/leejm/nos3/cfg/nos3_defs/targets.cmake
+  startup_file: /home/leejm/nos3/cfg/nos3_defs/cpu1_cfe_es_startup.scr
+  build: make config && make fsw
+  runtime_container: sc01-nos-fsw
+trigger_inputs:
+  static:
+    mechanism: OS_TaskDelay_or_CFE_TIME
+    mission_state_required: false
+  dynamic_novatel:
+    message_id: 0x0871
+    message_symbol: NOVATEL_OEM615_DEVICE_TLM_MID
+    request_command: NOVATEL_OEM615_REQ_DATA_TLM
+    mission_state_required: true
+coordination:
+  none:
+    component_count: 1
+  software_bus:
+    component_count: 2
+    mechanism: cfs_software_bus_custom_message
+  posix_fifo:
+    component_count: 2
+    mechanism: mkfifo
+    platform_scope: amd64-posix
+profiles:
+  - id: SC-APP-001
+    implementation_status: live_verified
+    architecture: single_component
+    trigger: static
+    coordination: none
+    component: sc_vendor_nav
+  - id: SC-APP-002
+    implementation_status: live_verified
+    architecture: single_component
+    trigger: dynamic_novatel
+    coordination: none
+    component: sc_vendor_nav
+  - id: SC-APP-003
+    implementation_status: live_verified
+    architecture: colluding_components
+    trigger: static
+    coordination: software_bus
+    components: [sc_vendor_nav, sc_vendor_diag]
+  - id: SC-APP-004
+    implementation_status: live_verified
+    architecture: colluding_components
+    trigger: dynamic_novatel
+    coordination: software_bus
+    components: [sc_vendor_nav, sc_vendor_diag]
+  - id: SC-APP-005
+    implementation_status: live_verified
+    architecture: colluding_components
+    trigger: dynamic_novatel
+    coordination: posix_fifo
+    components: [sc_vendor_nav, sc_vendor_diag]
+payload_matrix: payloads.yaml

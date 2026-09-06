@@ -1,0 +1,42 @@
+{
+  "attack_command": {
+    "command": "CFS BENCH_ATTACK_RESOURCE_FLOOD with COUNT 512, PAYLOADWORD 3735928559",
+    "ok": true
+  },
+  "es_alive_after": false,
+  "es_noop_after": {
+    "after": 0,
+    "before": 0,
+    "delta": 0,
+    "ok": false
+  },
+  "flood_attempt_delta": 512,
+  "flood_generated": true,
+  "flood_sent_delta": 512,
+  "flood_tx_error_delta": 0,
+  "message_gap": 83,
+  "passed": false,
+  "pressure_observed": true,
+  "requested_flood_count": 512,
+  "scenario_id": "SP-007",
+  "victim_alive_after": true,
+  "victim_noop_after": {
+    "after": {
+      "command": 1,
+      "error": 0,
+      "last_payload_word": 3735928559,
+      "last_sequence": 512,
+      "spoof_received": 429
+    },
+    "before": {
+      "command": 0,
+      "error": 0,
+      "last_payload_word": 3735928559,
+      "last_sequence": 512,
+      "spoof_received": 429
+    },
+    "delta": 1,
+    "ok": true
+  },
+  "victim_received_delta": 429
+}

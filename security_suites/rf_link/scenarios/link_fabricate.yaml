@@ -1,0 +1,27 @@
+id: RF-LINK-007
+name: RF link fabricated packet
+domain: rf_link
+description:
+  attack_entry: RF-link uplink command path or cryptolib-to-ground downlink telemetry path
+  affected_component: COM interface, TC fetcher, CI app, COSMOS telemetry parser
+  cps_type: Communication
+  security_consequence: Unauthorized or malformed packet injection into the command or telemetry path
+  recovery_strategy: Source authentication, packet validation, command authorization, event logging
+  injection_method: Directional UDP proxy sends attacker-controlled payload bytes to the selected receiver
+attack:
+  type: fabricate
+  direction: both
+  directions:
+    - uplink
+    - downlink
+  payload_text: BENCHMARK_FAKE_TC
+  interval_ms: 1000
+  count: 5
+metrics:
+  - packet_fabricated
+  - error_counter
+  - event_log
+pass_criteria:
+  min_packets_received: 0
+  min_attack_events: 1
+notes: Uses attacker-controlled bytes rather than the COSMOS command API. The downlink case sends them to the COSMOS telemetry receive port.

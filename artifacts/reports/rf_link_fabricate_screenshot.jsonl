@@ -1,0 +1,8 @@
+{"attack_type": "fabricate", "event": "scenario_start", "listen": "0.0.0.0:19000", "scenario_id": "RF-LINK-007", "scenario_name": "RF link fabricated packet", "socket_mark": null, "target": "172.18.0.6:5012", "ts": "2026-06-07T11:03:06.816895+00:00"}
+{"direction": "uplink", "event": "socket_bound", "listen": "0.0.0.0:19000", "ts": "2026-06-07T11:03:06.819222+00:00"}
+{"bytes": 8, "destination": "172.18.0.6:5012", "event": "packet_fabricated", "ts": "2026-06-07T11:03:06.822239+00:00"}
+{"bytes": 8, "destination": "172.18.0.6:5012", "event": "packet_fabricated", "ts": "2026-06-07T11:03:07.826890+00:00"}
+{"bytes": 8, "destination": "172.18.0.6:5012", "event": "packet_fabricated", "ts": "2026-06-07T11:03:08.827812+00:00"}
+{"bytes": 8, "destination": "172.18.0.6:5012", "event": "packet_fabricated", "ts": "2026-06-07T11:03:09.829188+00:00"}
+{"bytes": 8, "destination": "172.18.0.6:5012", "event": "packet_fabricated", "ts": "2026-06-07T11:03:10.831790+00:00"}
+{"event": "scenario_stop", "scenario_id": "RF-LINK-007", "ts": "2026-06-07T11:03:15.347920+00:00"}

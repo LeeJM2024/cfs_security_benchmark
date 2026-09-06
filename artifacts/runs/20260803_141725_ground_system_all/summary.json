@@ -1,0 +1,64 @@
+{
+  "suite": "ground_system",
+  "passed": true,
+  "case_count": 8,
+  "passed_case_count": 8,
+  "results": [
+    {
+      "scenario_id": "GS-001",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_141725_ground_system_all/gs001"
+    },
+    {
+      "scenario_id": "GS-002",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_141725_ground_system_all/gs002"
+    },
+    {
+      "scenario_id": "GS-003",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_141725_ground_system_all/gs003"
+    },
+    {
+      "scenario_id": "GS-004",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_141725_ground_system_all/gs004"
+    },
+    {
+      "scenario_id": "GS-005",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_141725_ground_system_all/gs005"
+    },
+    {
+      "scenario_id": "GS-006",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_141725_ground_system_all/gs006"
+    },
+    {
+      "scenario_id": "GS-007",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_141725_ground_system_all/gs007"
+    },
+    {
+      "scenario_id": "GS-008",
+      "status": "COMPLETED",
+      "passed": true,
+      "returncode": 0,
+      "output_dir": "/home/leejm/Space OS/cfs-security-benchmark/runs/20260803_141725_ground_system_all/gs008"
+    }
+  ]
+}

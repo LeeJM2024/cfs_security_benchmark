@@ -1,0 +1,34 @@
+{
+  "after": {
+    "command": 0,
+    "duty_bps": 7500,
+    "error": 0,
+    "guard_word": 3235835917,
+    "last_validation_status": -44,
+    "load_count": 0,
+    "update_count": 0,
+    "validation_failure_count": 1
+  },
+  "before": {
+    "command": 0,
+    "duty_bps": 7500,
+    "error": 0,
+    "guard_word": 3235835917,
+    "last_validation_status": 0,
+    "load_count": 0,
+    "update_count": 0,
+    "validation_failure_count": 0
+  },
+  "expected_safe_duty_bps": 7500,
+  "ok": true,
+  "table_load_command": {
+    "command": "CFS CFE_TBL_LOAD with LOADFILENAME /cf/bench_bad.tbl",
+    "ok": true
+  },
+  "table_validate_command": {
+    "command": "CFS CFE_TBL_VALIDATE with ACTIVETBLFLAG 0, TABLENAME BENCH_VICTIM.CONTROL_TBL",
+    "ok": true
+  },
+  "tampered_duty_bps": 12500,
+  "validation_failed": true
+}

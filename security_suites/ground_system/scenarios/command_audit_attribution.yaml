@@ -1,0 +1,72 @@
+id: GS-003
+name: Command success without attributable audit trail
+domain: ground_system
+description:
+  attack_entry: External benchmark runner sends one recoverable COSMOS telecommand and inspects only the audit-log bytes appended for that command
+  affected_component: COSMOS/OpenC3 command audit trail and its correlation to real cFS/NOS3 command execution
+  cps_type: Ground command accountability / command execution audit boundary
+  security_consequence: A real telecommand may execute while the available audit trail cannot reliably identify the initiator, session, full command context, and execution result
+  recovery_strategy: Use a recoverable EPS switch command and restore the switch to ON after each audit inspection
+  injection_method: External Python runner uses the existing COSMOS command API and read-only log inspection; it does not disable, erase, alter, or create system audit logs
+attack:
+  type: command_audit_attribution
+  docker_container: cosmos-openc3-operator-1
+  cases:
+    - id: GS003-EPS-SWITCH-AUDIT
+      name: EPS switch command audit coverage
+      setup:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      telemetry_requests:
+        - GENERIC_EPS GENERIC_EPS_REQ_HK
+      telemetry:
+        cmd_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_COUNT
+        err_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_ERR_COUNT
+        switch0: GENERIC_EPS GENERIC_EPS_HK_TLM SWITCH_0_STATE
+      command: GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE OFF
+      expected_packet_hex_suffix: "0000"
+      expected_effect:
+        telemetry: switch0
+        expected_any: ["OFF", 0]
+      audit_match:
+        server_message_substrings:
+          - 'cmd("GENERIC_EPS GENERIC_EPS_SWITCH_CC with'
+          - SWITCH_NUMBER SWITCH_0
+          - STATE OFF
+      audit_requirements:
+        - timestamp
+        - target
+        - command_name
+        - parameters
+        - encoded_packet
+        - actor_identity
+        - source_session
+        - execution_result
+      recovery:
+        - GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      recovery_effect:
+        telemetry: switch0
+        expected_any: ["ON", 170]
+metrics:
+  - per_case_command_execution_confirmed
+  - per_case_server_message_log_delta
+  - per_case_command_packet_log_delta
+  - per_case_audit_field_coverage
+  - per_case_missing_audit_fields
+  - per_case_recovery_succeeded
+pass_criteria:
+  benchmark_execution_required:
+    real_command_sent_through_cosmos_api: true
+    target_command_counter_increments: true
+    target_error_counter_unchanged: true
+    real_effect_observed: true
+    recovery_succeeds: true
+  audit_requirements:
+    timestamp: true
+    actor_identity: true
+    source_session: true
+    target: true
+    command_name: true
+    parameters: true
+    encoded_packet: true
+    execution_result: true
+notes: A benchmark run is technically complete when the command and recovery are observed. The security verdict is PROTECTED only when all configured audit requirements can be correlated to that specific command from system-produced audit sources.

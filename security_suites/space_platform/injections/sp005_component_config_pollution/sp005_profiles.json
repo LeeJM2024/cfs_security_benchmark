@@ -1,0 +1,347 @@
+[
+  {
+    "id": "adcs_magtorquer_saturation_low",
+    "title": "ADCS magtorquer saturation pollution",
+    "component": "GENERIC_ADCS",
+    "security_consequence": "The attitude controller runs with a polluted magnetic torquer authority limit, weakening control authority or making command saturation assumptions false.",
+    "path": "components/generic_adcs/fsw/shared/cfg/Inp_ADAC.txt",
+    "generated_paths": [
+      "fsw/build/exe/cpu1/cf/Inp_ADAC.txt"
+    ],
+    "mutator": "anchored_numeric_token",  
+    "anchor": "Magtorquer saturation",
+    "token_index": 0,
+    "expected_original": "1.42",
+    "malicious_value": "0.10",
+    "telemetry": {
+      "target": "GENERIC_ADCS",
+      "command": "GENERIC_ADCS_SEND_GNC_CC",
+      "packet": "GENERIC_ADCS_GNC",
+      "item": "MAX_MCMD",
+      "expected_original": 1.42,
+      "expected_attack": 0.1,
+      "tolerance": 0.001
+    }
+  },
+  {
+    "id": "adcs_inertial_error_threshold_tight",
+    "title": "ADCS inertial attitude error threshold pollution",
+    "component": "GENERIC_ADCS",
+    "security_consequence": "The inertial controller accepts a polluted attitude-error threshold, changing when the controller treats pointing error as tolerable or dangerous.",
+    "path": "components/generic_adcs/fsw/shared/cfg/Inp_ADAC.txt",
+    "generated_paths": [
+      "fsw/build/exe/cpu1/cf/Inp_ADAC.txt"
+    ],
+    "mutator": "anchored_numeric_token",
+    "anchor": "qbn, max euler angle",
+    "token_index": 4,
+    "expected_original": "10.0",
+    "malicious_value": "0.05",
+    "telemetry": {
+      "target": "GENERIC_ADCS",
+      "command": "GENERIC_ADCS_SEND_AC_CC",
+      "packet": "GENERIC_ADCS_AC",
+      "item": "INERTIAL_PHI_ERR_MAX",
+      "expected_original": 10.0,
+      "expected_attack": 0.05,
+      "tolerance": 0.001
+    }
+  },
+  {
+    "id": "adcs_inertial_gain_overcontrol",
+    "title": "ADCS inertial gain pollution",
+    "component": "GENERIC_ADCS",
+    "security_consequence": "The inertial controller runs with polluted proportional gains, changing closed-loop response and risking under-control, over-control, or actuator saturation.",
+    "path": "components/generic_adcs/fsw/shared/cfg/Inp_ADAC.txt",
+    "generated_paths": [
+      "fsw/build/exe/cpu1/cf/Inp_ADAC.txt"
+    ],
+    "mutator": "anchored_numeric_tokens",
+    "anchor": "scaled proportional gain, scaled derivative gain",
+    "replacements": [
+      {
+        "token_index": 0,
+        "expected_original": "0.04",
+        "malicious_value": "0.40"
+      },
+      {
+        "token_index": 1,
+        "expected_original": "0.04",
+        "malicious_value": "0.40"
+      },
+      {
+        "token_index": 2,
+        "expected_original": "0.04",
+        "malicious_value": "0.40"
+      }
+    ],
+    "telemetry": {
+      "target": "GENERIC_ADCS",
+      "command": "GENERIC_ADCS_SEND_AC_CC",
+      "packet": "GENERIC_ADCS_AC",
+      "items": [
+        "INERTIAL_KP_X",
+        "INERTIAL_KP_Y",
+        "INERTIAL_KP_Z"
+      ],
+      "expected_original": 0.04,
+      "expected_attack": 0.4,
+      "tolerance": 0.001
+    }
+  },
+  {
+    "id": "eps_battery_voltage_low",
+    "title": "EPS battery voltage physical configuration pollution",
+    "component": "GENERIC_EPS",
+    "security_consequence": "The EPS simulator reports a polluted battery voltage, misleading spacecraft power-state assessment and downstream load-management decisions.",
+    "path": "cfg/sims/nos3-simulator.xml",
+    "generated_paths": [
+      "sims/build/bin/nos3-simulator.xml"
+    ],
+    "mutator": "xml_text",
+    "xml_path": [
+      "hardware-model",
+      "physical",
+      "bus",
+      "battery-voltage"
+    ],
+    "expected_original": "24.0",
+    "malicious_value": "21.5",
+    "telemetry": {
+      "target": "GENERIC_EPS",
+      "command": "GENERIC_EPS_REQ_HK",
+      "packet": "GENERIC_EPS_HK_TLM",
+      "item": "BATT_VOLTAGE",
+      "expected_original": 24.0,
+      "expected_attack": 21.5,
+      "tolerance": 0.3,
+      "expected_attack_min": 19.95,
+      "expected_attack_max": 22.05,
+      "expected_restore_min": 22.8,
+      "expected_restore_max": 25.2,
+      "match": "range"
+    }
+  },
+  {
+    "id": "eps_solar_array_voltage_low",
+    "title": "EPS solar array voltage configuration pollution",
+    "component": "GENERIC_EPS",
+    "security_consequence": "The EPS simulator reports a polluted solar-array voltage, corrupting power-generation telemetry and spacecraft energy-balance assumptions.",
+    "path": "cfg/sims/nos3-simulator.xml",
+    "generated_paths": [
+      "sims/build/bin/nos3-simulator.xml"
+    ],
+    "mutator": "xml_text",
+    "xml_path": [
+      "hardware-model",
+      "physical",
+      "bus",
+      "solar-array-voltage"
+    ],
+    "expected_original": "32.0",
+    "malicious_value": "27.5",
+    "telemetry": {
+      "target": "GENERIC_EPS",
+      "command": "GENERIC_EPS_REQ_HK",
+      "packet": "GENERIC_EPS_HK_TLM",
+      "item": "SA_VOLTAGE",
+      "expected_original": 32.0,
+      "expected_attack": 27.0,
+      "tolerance": 0.6
+    }
+  },
+  {
+    "id": "adcs_do_magnetorquer_frame_flip",
+    "title": "ADCS magnetorquer actuator frame pollution",
+    "component": "GENERIC_ADCS",
+    "security_consequence": "The ADCS output configuration maps magnetorquer commands through a polluted actuator-to-body quaternion, so commanded magnetic moments can be rotated into the wrong spacecraft body frame direction.",
+    "path": "components/generic_adcs/fsw/shared/cfg/Inp_DO.txt",
+    "generated_paths": [
+      "fsw/build/exe/cpu1/cf/Inp_DO.txt"
+    ],
+    "mutator": "anchored_numeric_tokens",
+    "anchor": "Quaternion from actuator to body frame",
+    "replacements": [
+      {
+        "token_index": 0,
+        "expected_original": "0.0",
+        "malicious_value": "0.7071"
+      },
+      {
+        "token_index": 3,
+        "expected_original": "1.0",
+        "malicious_value": "0.7071"
+      }
+    ],
+    "telemetry": {
+      "target": "GENERIC_ADCS",
+      "command": "GENERIC_ADCS_SEND_DO_CC",
+      "packet": "GENERIC_ADCS_DO",
+      "items": [
+        {
+          "item": "QBA_0",
+          "expected_original": 0.0,
+          "expected_attack": 0.7071,
+          "tolerance": 0.0002
+        },
+        {
+          "item": "QBA_3",
+          "expected_original": 1.0,
+          "expected_attack": 0.7071,
+          "tolerance": 0.0002
+        }
+      ]
+    }
+  },
+  {
+    "id": "adcs_di_css0_scale_high",
+    "title": "ADCS coarse sun sensor scale pollution",
+    "component": "GENERIC_ADCS",
+    "security_consequence": "The ADCS input configuration trusts a polluted coarse sun sensor scale factor, biasing sun-vector construction and any control mode that depends on coarse sun sensor measurements.",
+    "path": "components/generic_adcs/fsw/shared/cfg/Inp_DI.txt",
+    "generated_paths": [
+      "fsw/build/exe/cpu1/cf/Inp_DI.txt"
+    ],
+    "mutator": "anchored_numeric_token",
+    "anchor": "Axis in body, scale factor",
+    "line_match_index": 0,
+    "token_index": 3,
+    "expected_original": "0.001",
+    "malicious_value": "0.010",
+    "telemetry": {
+      "target": "GENERIC_ADCS",
+      "command": "GENERIC_ADCS_SEND_DI_CC",
+      "packet": "GENERIC_ADCS_DI",
+      "item": "SCALE0",
+      "expected_original": 0.001,
+      "expected_attack": 0.01,
+      "tolerance": 0.0002
+    }
+  },
+  {
+    "id": "torquer_sim_mtb0_saturation_low",
+    "title": "42 torquer MTB0 saturation pollution",
+    "component": "GENERIC_TORQUER",
+    "security_consequence": "The 42 spacecraft actuator model receives a polluted MTB0 saturation limit, so commanded magnetic torque authority in simulation no longer matches the spacecraft design assumption used by ADCS testing.",
+    "path": "cfg/InOut/SC_NOS3.txt",
+    "generated_paths": [
+      "cfg/build/InOut/SC_NOS3.txt"
+    ],
+    "mutator": "anchored_numeric_token",
+    "anchor": "Saturation (A-m^2)",
+    "line_match_index": 0,
+    "token_index": 0,
+    "expected_original": "1.42",
+    "malicious_value": "0.10",
+    "telemetry": {
+      "target": "GENERIC_TORQUER",
+      "command": "GENERIC_TORQUER_REQ_HK_CC",
+      "packet": "GENERIC_TORQUER_HK_TLM_T",
+      "items": [
+        "DEVICE_COUNT",
+        "TORQUER_PERCENT_ON_0"
+      ],
+      "match": "observe"
+    }
+  },
+  {
+    "id": "star_tracker_fov_narrow",
+    "title": "42 star tracker FOV pollution",
+    "component": "GENERIC_STAR_TRACKER",
+    "security_consequence": "The 42 spacecraft sensor model receives a narrowed star tracker field of view, increasing the chance that valid attitude measurements disappear even though the flight software and test operator did not command a sensor fault.",
+    "path": "cfg/InOut/SC_NOS3.txt",
+    "generated_paths": [
+      "cfg/build/InOut/SC_NOS3.txt"
+    ],
+    "mutator": "anchored_numeric_tokens",
+    "anchor": "H, V FOV Size, deg",
+    "line_match_index": 0,
+    "replacements": [
+      {
+        "token_index": 0,
+        "expected_original": "8.0",
+        "malicious_value": "1.0"
+      },
+      {
+        "token_index": 1,
+        "expected_original": "8.0",
+        "malicious_value": "1.0"
+      }
+    ],
+    "telemetry": {
+      "target": "GENERIC_STAR_TRACKER",
+      "command": "GENERIC_STAR_TRACKER_REQ_DATA",
+      "packet": "GENERIC_STAR_TRACKER_DATA_TLM",
+      "items": [
+        "STAR_TRACKER_IS_VALID",
+        "STAR_TRACKER_Q0"
+      ],
+      "match": "observe"
+    }
+  },
+  {
+    "id": "fss_fov_narrow",
+    "title": "42 fine sun sensor FOV pollution",
+    "component": "GENERIC_FSS",
+    "security_consequence": "The 42 spacecraft sensor model receives a narrowed fine sun sensor field of view, causing sun-vector availability and angle measurements to be governed by attacker-controlled geometry rather than the intended sensor envelope.",
+    "path": "cfg/InOut/SC_NOS3.txt",
+    "generated_paths": [
+      "cfg/build/InOut/SC_NOS3.txt"
+    ],
+    "mutator": "anchored_numeric_tokens",
+    "anchor": "X, Y FOV Size, deg",
+    "replacements": [
+      {
+        "token_index": 0,
+        "expected_original": "60.0",
+        "malicious_value": "5.0"
+      },
+      {
+        "token_index": 1,
+        "expected_original": "60.0",
+        "malicious_value": "5.0"
+      }
+    ],
+    "telemetry": {
+      "target": "GENERIC_FSS",
+      "command": "GENERIC_FSS_REQ_DATA",
+      "packet": "GENERIC_FSS_DATA_TLM",
+      "items": [
+        "GENERIC_FSS_ERROR_CODE",
+        "GENERIC_FSS_ALPHA"
+      ],
+      "match": "observe"
+    }
+  },
+  {
+    "id": "eps_switch0_current_high",
+    "title": "EPS switch-0 load current pollution",
+    "component": "GENERIC_EPS",
+    "security_consequence": "The EPS simulator runs switch-0 with a polluted load current, corrupting load telemetry and accelerating the modeled battery discharge used for power-margin decisions.",
+    "path": "cfg/sims/nos3-simulator.xml",
+    "generated_paths": [
+      "sims/build/bin/nos3-simulator.xml"
+    ],
+    "mutator": "xml_text",
+    "xml_path": [
+      "hardware-model",
+      "physical",
+      "switch-0",
+      "current"
+    ],
+    "expected_original": "4.56",
+    "malicious_value": "12.00",
+    "telemetry": {
+      "target": "GENERIC_EPS",
+      "command": "GENERIC_EPS_REQ_HK",
+      "packet": "GENERIC_EPS_HK_TLM",
+      "item": "SW_0_CURRENT",
+      "expected_original": 4.56,
+      "expected_attack": 12.0,
+      "tolerance": 0.03,
+      "setup_commands": [
+        "GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER SWITCH_0, STATE ON"
+      ]
+    }
+  }
+]

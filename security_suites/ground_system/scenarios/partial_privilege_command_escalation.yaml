@@ -1,0 +1,64 @@
+id: GS-007
+name: Partial-privilege command escalation
+domain: ground_system
+description:
+  attack_entry: A genuinely authenticated low-privilege ground identity submits a command through its normal ground command API
+  affected_component: Ground command role policy, identity-to-session binding, and command authorization enforcement
+  cps_type: Ground command authority / least-privilege boundary
+  security_consequence: An identity limited to low-risk operations may release a critical telecommand and cause a real spacecraft-side state change
+  recovery_strategy: The adapter must use an authorized recovery path and prove that the benchmark-owned target state was restored
+  injection_method: The runner delegates authenticated submission and observation to an explicit local adapter; it does not create accounts, alter RBAC policy, or impersonate an identity
+attack:
+  type: partial_privilege_command_escalation
+  adapter_contract: gs007_external_json_v1
+  legacy_cosmos_preflight:
+    docker_container: cosmos-openc3-operator-1
+    command_server_config: /home/leejm/nos3/gsw/cosmos/config/tools/cmd_tlm_server/cmd_tlm_server.txt
+    role_policy_directives:
+      - AUTH
+      - ACL
+      - ROLE
+      - USER
+      - PERMISSION
+  cases:
+    - id: GS007-EPS-SWITCH-ROLE-BYPASS
+      name: Low-privilege operator releases an EPS switch-off command
+      low_risk_command: GENERIC_EPS GENERIC_EPS_REQ_HK
+      privileged_command: GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE OFF
+      expected_effect: SWITCH_0_STATE becomes OFF and the EPS command counter increases without an error-counter increase
+      recovery_command: GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+    - id: GS007-ADCS-MODE-ROLE-BYPASS
+      name: Low-privilege operator releases an ADCS mode command
+      low_risk_command: GENERIC_ADCS GENERIC_ADCS_REQ_HK
+      privileged_command: GENERIC_ADCS GENERIC_ADCS_SET_MODE_CC with GNC_MODE INERTIAL_MODE
+      expected_effect: ADCS GNC mode becomes INERTIAL_MODE and the ADCS command counter increases without an error-counter increase
+      recovery_command: Restore the ADCS mode captured before the test
+    - id: GS007-RW-TORQUE-ROLE-BYPASS
+      name: Low-privilege operator releases a reaction-wheel torque command
+      low_risk_command: GENERIC_REACTION_WHEEL GENERIC_RW_REQ_DATA_CC
+      privileged_command: GENERIC_REACTION_WHEEL GENERIC_RW_SET_TORQUE_CC with WHEEL_NUMBER 0, TORQUE 10
+      expected_effect: Reaction-wheel command counter increases and wheel 0 momentum changes when spacecraft mode permits actuator motion
+      recovery_command: GENERIC_REACTION_WHEEL GENERIC_RW_SET_TORQUE_CC with WHEEL_NUMBER 0, TORQUE 0
+metrics:
+  - authenticated_low_privilege_identity_verified
+  - low_risk_command_accepted
+  - critical_command_expected_to_be_denied
+  - critical_command_accepted
+  - critical_command_reached_command_buffer
+  - critical_command_real_effect_observed
+  - recovery_succeeded
+pass_criteria:
+  precondition_required:
+    identity_authenticated: true
+    non_administrative_role: true
+    low_risk_command_allowed: true
+    critical_command_denied_by_declared_policy: true
+  per_case_required:
+    critical_command_accepted: true
+    critical_command_reached_command_buffer: true
+    critical_command_real_effect_observed: true
+    recovery_succeeds: true
+notes: >-
+  PASS means a real, authenticated low-privilege identity bypassed its declared command policy.
+  FAIL means the attack was prevented, or the system exposes no verifiable low-privilege identity and is therefore not a valid partial-privilege escalation test target.
+  The bundled cosmos_legacy adapter is intentionally preflight-only: current NOS3/COSMOS has no role, ACL, or authenticated command-session boundary, so it must never manufacture a simulated role or send a critical TC.

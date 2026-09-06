@@ -1,0 +1,8 @@
+#ifndef _SP004_TABLE_TAMPER_MSGIDS_H_
+#define _SP004_TABLE_TAMPER_MSGIDS_H_
+
+#define SP004_CMD_MID    0x19F4
+#define SP004_REQ_HK_MID 0x19F5
+#define SP004_HK_TLM_MID 0x09F4
+
+#endif

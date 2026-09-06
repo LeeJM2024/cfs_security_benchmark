@@ -1,0 +1,8 @@
+#ifndef _SP003_APP_CRASH_RESTART_MSGIDS_H_
+#define _SP003_APP_CRASH_RESTART_MSGIDS_H_
+
+#define SP003_CMD_MID       0x19F2
+#define SP003_REQ_HK_MID    0x19F3
+#define SP003_HK_TLM_MID    0x09F2
+
+#endif

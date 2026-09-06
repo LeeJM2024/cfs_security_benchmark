@@ -1,0 +1,10 @@
+#ifndef _SP001_SB_SPOOF_EVENTS_H_
+#define _SP001_SB_SPOOF_EVENTS_H_
+
+#define SP001_STARTUP_INF_EID 1
+#define SP001_SPOOF_INF_EID   2
+#define SP001_SPOOF_ERR_EID   3
+#define SP001_CMD_INF_EID     4
+#define SP001_CMD_ERR_EID     5
+
+#endif

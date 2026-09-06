@@ -1,0 +1,73 @@
+{
+  "attack_after": {
+    "command": 0,
+    "error": 0,
+    "flood_attempt": 512,
+    "flood_sent": 512,
+    "flood_tx_error": 0,
+    "last_flood_count": 512,
+    "last_payload_word": 3735928559,
+    "spoof_sent": 512
+  },
+  "attack_before": {
+    "command": 0,
+    "error": 0,
+    "flood_attempt": 0,
+    "flood_sent": 0,
+    "flood_tx_error": 0,
+    "last_flood_count": 0,
+    "last_payload_word": 0,
+    "spoof_sent": 0
+  },
+  "attack_command": {
+    "command": "CFS BENCH_ATTACK_RESOURCE_FLOOD with COUNT 512, PAYLOADWORD 3735928559",
+    "ok": true
+  },
+  "es_noop_after": {
+    "after": 0,
+    "before": 0,
+    "delta": 0,
+    "ok": false
+  },
+  "flood_attempt_delta": 512,
+  "flood_sent_delta": 512,
+  "flood_tx_error_delta": 0,
+  "message_gap": 83,
+  "ok": true,
+  "payload_word": 3735928559,
+  "pressure_observed": true,
+  "requested_flood_count": 512,
+  "victim_after": {
+    "command": 0,
+    "error": 0,
+    "last_payload_word": 3735928559,
+    "last_sequence": 512,
+    "spoof_received": 429
+  },
+  "victim_before": {
+    "command": 0,
+    "error": 0,
+    "last_payload_word": 0,
+    "last_sequence": 0,
+    "spoof_received": 0
+  },
+  "victim_noop_after": {
+    "after": {
+      "command": 1,
+      "error": 0,
+      "last_payload_word": 3735928559,
+      "last_sequence": 512,
+      "spoof_received": 429
+    },
+    "before": {
+      "command": 0,
+      "error": 0,
+      "last_payload_word": 3735928559,
+      "last_sequence": 512,
+      "spoof_received": 429
+    },
+    "delta": 1,
+    "ok": true
+  },
+  "victim_received_delta": 429
+}

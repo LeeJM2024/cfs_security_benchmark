@@ -1,0 +1,29 @@
+suite_id: SC-ART
+name: Supply-chain mission artifact track
+domain: supply_chain
+profiles:
+  - id: SC-ART-001
+    artifact: flight_table_release
+    source_suite: space_platform/SP004
+    effect: semantically_malicious_but_format_valid_table
+    implementation_status: executable_staged
+  - id: SC-ART-002
+    artifact: component_configuration_release
+    source_suite: space_platform/SP005
+    effect: source_to_generated_to_runtime_configuration_pollution
+    implementation_status: executable_staged
+  - id: SC-ART-003
+    artifact: cosmos_command_dictionary_release
+    source_suite: ground_system/GS002
+    effect: operator_visible_command_semantic_pollution
+    implementation_status: executable_staged_manual_cmdtlmserver_reload
+  - id: SC-ART-004
+    artifact: ground_procedure_or_route_release
+    source_suite: ground_system/GS004
+    effect: valid_operation_misdirection_or_wrong_encoding
+    implementation_status: executable_staged_manual_cmdtlmserver_reload
+  - id: SC-ART-005
+    artifact: revoked_or_mismatched_release
+    source_suite: supply_chain
+    effect: native_nos3_release_gate_absence_allows_revoked_or_rollback_release
+    implementation_status: executable_native_release_ingress_audit

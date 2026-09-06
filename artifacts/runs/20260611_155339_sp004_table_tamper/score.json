@@ -1,0 +1,22 @@
+{
+  "active_value_preserved": true,
+  "after_duty_bps": 7500,
+  "after_update_count": 0,
+  "after_validation_failure_count": 1,
+  "before_duty_bps": 7500,
+  "before_update_count": 0,
+  "before_validation_failure_count": 0,
+  "last_validation_status": -44,
+  "no_table_update_after_tamper": true,
+  "passed": true,
+  "scenario_id": "SP-004",
+  "table_load_command": {
+    "command": "CFS CFE_TBL_LOAD with LOADFILENAME /cf/bench_bad.tbl",
+    "ok": true
+  },
+  "table_validate_command": {
+    "command": "CFS CFE_TBL_VALIDATE with ACTIVETBLFLAG 0, TABLENAME BENCH_VICTIM.CONTROL_TBL",
+    "ok": true
+  },
+  "validation_failed": true
+}

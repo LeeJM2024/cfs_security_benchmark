@@ -1,0 +1,28 @@
+id: RF-LINK-006
+name: RF link command flood
+domain: rf_link
+description:
+  attack_entry: RF-link uplink command path or cryptolib-to-ground downlink telemetry path
+  affected_component: COM interface, CI app, cFE Software Bus, cFS apps, COSMOS telemetry receiver
+  cps_type: Communication
+  security_consequence: Denial of control or resource exhaustion caused by excessive packets
+  recovery_strategy: Rate limiting, command source filtering, watchdog restart, safe mode
+  injection_method: Directional UDP proxy sends random packets to the selected receiver at a configured rate
+attack:
+  type: flood
+  direction: both
+  directions:
+    - uplink
+    - downlink
+  rate_per_second: 20
+  payload_size: 64
+  flood_duration_seconds: 10
+metrics:
+  - packet_flooded
+  - cpu_load
+  - command_error_counter
+  - app_health
+pass_criteria:
+  min_packets_received: 0
+  min_attack_events: 1
+notes: The downlink case targets the COSMOS telemetry receive port while EPS housekeeping requests measure continuity.

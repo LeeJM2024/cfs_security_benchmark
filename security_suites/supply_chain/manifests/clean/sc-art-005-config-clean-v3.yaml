@@ -1,0 +1,13 @@
+schema_version: 1
+release_id: sc-art-005-config-clean-v3
+profile_id: SC-ART-005
+artifact_type: component_configuration_release
+supplier_id: benchmark-approved-supplier
+version: 3.0.0
+issued_at: '2026-08-10T00:00:00Z'
+status: clean
+compatibility: {nos3: local, cfs: nos3-cfs}
+content: [{source: security_suites/space_platform/injections/sp005_component_config_pollution/sp005_profiles.json, sha256: 4a2eb5732b901364d95c0826c840f73526a6be675bec8139163fce4f16c0e8cb}]
+operations: [{type: append_unique_line, target: .sc_release_gate/config-clean-v3, line: accepted-release-marker}]
+lifecycle: {adapter: acceptance_only, requires_build_relaunch: false, requires_operator_reload: false}
+signature: {algorithm: HMAC-SHA256, key_id: sc-local-fixture-2026, value: 9d3b571a743931ed68c06862b79cc8adc8a4c8114cb66da9ff6211520dcedb3a}

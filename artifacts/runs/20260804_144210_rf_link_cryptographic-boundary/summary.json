@@ -1,0 +1,36 @@
+{
+  "scores": [
+    {
+      "scenario_id": "RF-LINK-002",
+      "direction": "uplink",
+      "passed": false,
+      "threat_model": "cryptographic-boundary",
+      "attack_effect": "unavailable",
+      "evidence": {
+        "threat_model": "cryptographic-boundary",
+        "payload_format": "protected_frame",
+        "preflight_error": "cryptographic-boundary topology unavailable: Command '['docker', 'exec', 'cosmos-openc3-operator-1', 'getent', 'hosts', 'cryptolib']' returned non-zero exit status 1."
+      },
+      "notes": [
+        "This is an execution-precondition failure, not evidence that cryptographic protection blocked an attack.",
+        "cryptographic-boundary topology unavailable: Command '['docker', 'exec', 'cosmos-openc3-operator-1', 'getent', 'hosts', 'cryptolib']' returned non-zero exit status 1."
+      ]
+    },
+    {
+      "scenario_id": "RF-LINK-002",
+      "direction": "downlink",
+      "passed": false,
+      "threat_model": "cryptographic-boundary",
+      "attack_effect": "unavailable",
+      "evidence": {
+        "threat_model": "cryptographic-boundary",
+        "payload_format": "protected_frame",
+        "preflight_error": "cryptographic-boundary topology unavailable: Command '['docker', 'exec', 'cosmos-openc3-operator-1', 'getent', 'hosts', 'cryptolib']' returned non-zero exit status 1."
+      },
+      "notes": [
+        "This is an execution-precondition failure, not evidence that cryptographic protection blocked an attack.",
+        "cryptographic-boundary topology unavailable: Command '['docker', 'exec', 'cosmos-openc3-operator-1', 'getent', 'hosts', 'cryptolib']' returned non-zero exit status 1."
+      ]
+    }
+  ]
+}

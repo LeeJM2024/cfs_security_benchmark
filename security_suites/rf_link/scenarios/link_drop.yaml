@@ -1,0 +1,26 @@
+id: RF-LINK-002
+name: RF link packet drop
+domain: rf_link
+description:
+  attack_entry: RF-link uplink command path or cryptolib-to-ground downlink telemetry path
+  affected_component: COM interface, TC fetcher, CI app, COSMOS telemetry receiver
+  cps_type: Communication
+  security_consequence: Denial of control through lost telecommands or lost telemetry
+  recovery_strategy: Retransmission, timeout handling, redundant link, minimum communication mode
+  injection_method: Directional UDP proxy probabilistically drops packets before forwarding
+attack:
+  type: drop
+  direction: both
+  directions:
+    - uplink
+    - downlink
+  probability: 0.5
+metrics:
+  - packet_received
+  - packet_forwarded
+  - command_counter
+  - telemetry_continuity
+pass_criteria:
+  min_packets_received: 1
+  min_attack_events: 0
+notes: Uplink compares command delivery; downlink compares EPS housekeeping continuity before and during attack.

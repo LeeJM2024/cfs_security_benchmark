@@ -1,0 +1,14 @@
+{
+  "es_alive_after": false,
+  "fault_command_ok": false,
+  "passed": false,
+  "post_fault_blocked": false,
+  "post_fault_command_delta": null,
+  "post_recovery_alive": false,
+  "post_recovery_command_delta": null,
+  "pre_fault_alive": false,
+  "pre_fault_command_delta": null,
+  "recovery_command": null,
+  "recovery_command_ok": false,
+  "scenario_id": "SP-003"
+}

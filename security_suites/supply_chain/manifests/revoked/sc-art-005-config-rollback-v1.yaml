@@ -1,0 +1,23 @@
+schema_version: 1
+release_id: sc-art-005-generic-adcs-release-v1
+profile_id: SC-ART-005
+artifact_type: component_source_release
+supplier_id: benchmark-approved-supplier
+version: 1.0.1
+issued_at: '2025-01-01T00:00:00Z'
+status: released
+compatibility: {nos3: local, cfs: nos3-cfs}
+content:
+  - {source: security_suites/supply_chain/releases/sc-art-005-generic-adcs-v1/generic_adcs_version.h, sha256: d9afa082233403faa55fea790b390ad847459eba26d0d3550d0a9f539a2c4116}
+  - {source: security_suites/supply_chain/releases/sc-art-005-generic-adcs-v1/generic_adcs_variant_verify.rb, sha256: 9de8d534603d4fdd804e032bb9249ed58efb7a7c61ef07d6a9270c555755517e}
+operations:
+  - {type: copy_file, source: security_suites/supply_chain/releases/sc-art-005-generic-adcs-v1/generic_adcs_version.h, target: components/generic_adcs/fsw/shared/generic_adcs_version.h, sha256: d9afa082233403faa55fea790b390ad847459eba26d0d3550d0a9f539a2c4116}
+  - {type: copy_file, source: security_suites/supply_chain/releases/sc-art-005-generic-adcs-v1/generic_adcs_variant_verify.rb, target: gsw/cosmos/config/targets/MISSION/procedures/sc_art005_generic_adcs_variant_verify.rb, sha256: 9de8d534603d4fdd804e032bb9249ed58efb7a7c61ef07d6a9270c555755517e}
+lifecycle:
+  adapter: component_variant
+  component_release: generic_adcs-1.0.1.0
+  expected_startup_version: 1.0.1.0
+  requires_build_relaunch: true
+  requires_operator_reload: false
+  verifier: security_suites/supply_chain/releases/sc-art-005-generic-adcs-v1/generic_adcs_variant_verify.rb
+signature: {algorithm: HMAC-SHA256, key_id: sc-local-fixture-2026, value: f260d3af83355e54eb7c847eab67720671c1f42e29fe384fae3bf846a5785135}

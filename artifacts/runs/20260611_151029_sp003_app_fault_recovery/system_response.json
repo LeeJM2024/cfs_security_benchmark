@@ -1,0 +1,270 @@
+{
+  "es_alive_after": {
+    "after": 2,
+    "before": 0,
+    "delta": 2,
+    "ok": true
+  },
+  "fault_command": {
+    "command": "CFS BENCH_VICTIM_INJECT_FAULT",
+    "ok": true
+  },
+  "ok": true,
+  "post_fault_alive": {
+    "backtrace": [
+      "/usr/lib/ruby/2.5.0/socket.rb:456:in `__write_nonblock'",
+      "/usr/lib/ruby/2.5.0/socket.rb:456:in `write_nonblock'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:83:in `block in write'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `loop'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `write'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/udp_interface.rb:150:in `write_interface'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:258:in `block in write'",
+      "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:289:in `block in _write'"
+    ],
+    "blocked": true,
+    "error": "Connection refused - Connection refused",
+    "error_class": "Errno::ECONNREFUSED",
+    "label": "post_fault_alive",
+    "ok": false
+  },
+  "post_fault_query": {
+    "app_filename": "",
+    "app_name": "",
+    "command": "CFS CFE_ES_QUERY_ONE with APPLICATION BENCH_VICTIM",
+    "entrypoint": "",
+    "errors": null,
+    "execution_counter": 0,
+    "ok": true
+  },
+  "post_recovery_alive": {
+    "after": {
+      "command": 2,
+      "error": 0,
+      "spoof_received": 0
+    },
+    "before": {
+      "command": 1,
+      "error": 0,
+      "spoof_received": 0
+    },
+    "blocked": false,
+    "delta": 1,
+    "label": "automatic_fsw_recovery",
+    "ok": true
+  },
+  "post_recovery_query": {
+    "app_filename": "",
+    "app_name": "",
+    "command": "CFS CFE_ES_QUERY_ONE with APPLICATION BENCH_VICTIM",
+    "entrypoint": "",
+    "errors": null,
+    "execution_counter": 0,
+    "ok": true
+  },
+  "pre_fault_alive": {
+    "after": {
+      "command": 1,
+      "error": 0,
+      "spoof_received": 0
+    },
+    "before": {
+      "command": 0,
+      "error": 0,
+      "spoof_received": 0
+    },
+    "blocked": false,
+    "delta": 1,
+    "label": "pre_fault_alive",
+    "ok": true
+  },
+  "pre_query": {
+    "app_filename": "",
+    "app_name": "",
+    "command": "CFS CFE_ES_QUERY_ONE with APPLICATION BENCH_VICTIM",
+    "entrypoint": "",
+    "errors": null,
+    "execution_counter": 0,
+    "ok": true
+  },
+  "recovery": {
+    "attempts": [
+      {
+        "probe": {
+          "backtrace": [
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:231:in `write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/tools/cmd_tlm_server/commanding.rb:82:in `send_command_to_interface'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/tools/cmd_tlm_server/commanding.rb:38:in `send_command_to_target'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/tools/cmd_tlm_server/api.rb:1638:in `cmd_implementation'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/tools/cmd_tlm_server/api.rb:161:in `cmd'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/json_drb.rb:265:in `process_request'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/json_drb_rack.rb:79:in `handle_post'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/json_drb_rack.rb:61:in `call'"
+          ],
+          "blocked": true,
+          "error": "Interface not connected for write: DEBUG",
+          "error_class": "RuntimeError",
+          "label": "automatic_fsw_recovery",
+          "ok": false
+        },
+        "reconnect": {
+          "after": "ATTEMPTING",
+          "before": "ATTEMPTING"
+        }
+      },
+      {
+        "probe": {
+          "backtrace": [
+            "/usr/lib/ruby/2.5.0/socket.rb:456:in `__write_nonblock'",
+            "/usr/lib/ruby/2.5.0/socket.rb:456:in `write_nonblock'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:83:in `block in write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `loop'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/udp_interface.rb:150:in `write_interface'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:258:in `block in write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:289:in `block in _write'"
+          ],
+          "blocked": true,
+          "error": "Connection refused - Connection refused",
+          "error_class": "Errno::ECONNREFUSED",
+          "label": "automatic_fsw_recovery",
+          "ok": false
+        },
+        "reconnect": {
+          "after": "CONNECTED",
+          "before": "CONNECTED"
+        }
+      },
+      {
+        "probe": {
+          "backtrace": [
+            "/usr/lib/ruby/2.5.0/socket.rb:456:in `__write_nonblock'",
+            "/usr/lib/ruby/2.5.0/socket.rb:456:in `write_nonblock'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:83:in `block in write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `loop'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/udp_interface.rb:150:in `write_interface'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:258:in `block in write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:289:in `block in _write'"
+          ],
+          "blocked": true,
+          "error": "Connection refused - Connection refused",
+          "error_class": "Errno::ECONNREFUSED",
+          "label": "automatic_fsw_recovery",
+          "ok": false
+        },
+        "reconnect": {
+          "after": "CONNECTED",
+          "before": "ATTEMPTING"
+        }
+      },
+      {
+        "probe": {
+          "backtrace": [
+            "/usr/lib/ruby/2.5.0/socket.rb:456:in `__write_nonblock'",
+            "/usr/lib/ruby/2.5.0/socket.rb:456:in `write_nonblock'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:83:in `block in write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `loop'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/udp_interface.rb:150:in `write_interface'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:258:in `block in write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:289:in `block in _write'"
+          ],
+          "blocked": true,
+          "error": "Connection refused - Connection refused",
+          "error_class": "Errno::ECONNREFUSED",
+          "label": "automatic_fsw_recovery",
+          "ok": false
+        },
+        "reconnect": {
+          "after": "CONNECTED",
+          "before": "ATTEMPTING"
+        }
+      },
+      {
+        "probe": {
+          "backtrace": [
+            "/usr/lib/ruby/2.5.0/socket.rb:456:in `__write_nonblock'",
+            "/usr/lib/ruby/2.5.0/socket.rb:456:in `write_nonblock'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:83:in `block in write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `loop'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/io/udp_sockets.rb:81:in `write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/udp_interface.rb:150:in `write_interface'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:258:in `block in write'",
+            "/var/lib/gems/2.5.0/gems/cosmos-4.5.0/lib/cosmos/interfaces/interface.rb:289:in `block in _write'"
+          ],
+          "blocked": true,
+          "error": "Connection refused - Connection refused",
+          "error_class": "Errno::ECONNREFUSED",
+          "label": "automatic_fsw_recovery",
+          "ok": false
+        },
+        "reconnect": {
+          "after": "CONNECTED",
+          "before": "ATTEMPTING"
+        }
+      },
+      {
+        "probe": {
+          "after": {
+            "command": 1,
+            "error": 0,
+            "spoof_received": 0
+          },
+          "before": {
+            "command": 1,
+            "error": 0,
+            "spoof_received": 0
+          },
+          "blocked": true,
+          "delta": 0,
+          "label": "automatic_fsw_recovery",
+          "ok": false
+        },
+        "reconnect": {
+          "after": "CONNECTED",
+          "before": "ATTEMPTING"
+        }
+      },
+      {
+        "probe": {
+          "after": {
+            "command": 2,
+            "error": 0,
+            "spoof_received": 0
+          },
+          "before": {
+            "command": 1,
+            "error": 0,
+            "spoof_received": 0
+          },
+          "blocked": false,
+          "delta": 1,
+          "label": "automatic_fsw_recovery",
+          "ok": true
+        },
+        "reconnect": {
+          "after": "CONNECTED",
+          "before": "CONNECTED"
+        }
+      }
+    ],
+    "method": "automatic_fsw_respawn",
+    "ok": true,
+    "probe": {
+      "after": {
+        "command": 2,
+        "error": 0,
+        "spoof_received": 0
+      },
+      "before": {
+        "command": 1,
+        "error": 0,
+        "spoof_received": 0
+      },
+      "blocked": false,
+      "delta": 1,
+      "label": "automatic_fsw_recovery",
+      "ok": true
+    }
+  }
+}

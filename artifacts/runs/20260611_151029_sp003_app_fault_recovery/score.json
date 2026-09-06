@@ -1,0 +1,15 @@
+{
+  "es_alive_after": true,
+  "fault_command_ok": true,
+  "passed": true,
+  "post_fault_blocked": true,
+  "post_fault_command_delta": null,
+  "post_recovery_alive": true,
+  "post_recovery_command_delta": 1,
+  "pre_fault_alive": true,
+  "pre_fault_command_delta": 1,
+  "recovery_command": null,
+  "recovery_method": "automatic_fsw_respawn",
+  "recovery_ok": true,
+  "scenario_id": "SP-003"
+}

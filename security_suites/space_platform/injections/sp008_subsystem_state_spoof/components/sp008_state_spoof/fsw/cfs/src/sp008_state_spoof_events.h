@@ -1,0 +1,10 @@
+#ifndef _SP008_STATE_SPOOF_EVENTS_H_
+#define _SP008_STATE_SPOOF_EVENTS_H_
+
+#define SP008_STARTUP_INF_EID 1
+#define SP008_CMD_INF_EID     2
+#define SP008_CMD_ERR_EID     3
+#define SP008_SPOOF_INF_EID   4
+#define SP008_SPOOF_ERR_EID   5
+
+#endif

@@ -1,0 +1,220 @@
+id: GS-001
+name: Dangerous TC independent authorization
+domain: ground_system
+description:
+  attack_entry: External ground benchmark runner using the COSMOS/OpenC3 command API
+  affected_component: COSMOS/OpenC3 command release interface and real NOS3/cFS command handlers
+  cps_type: Ground command authority / spacecraft control boundary
+  security_consequence: A ground-side script can directly release hazardous spacecraft telecommands without an independent authorization decision at the command interface
+  recovery_strategy: Send the corresponding legitimate recovery command or restore the benchmark-owned file fixture after each individual telecommand case
+  injection_method: External Python runner executes docker exec cosmos-openc3-operator-1 /usr/bin/ruby -e without installing a COSMOS procedure, cFS app, or benchmark target component
+attack:
+  type: dangerous_tc_independent_authorization
+  docker_container: cosmos-openc3-operator-1
+  fsw_container: sc01-nos-fsw
+  cases:
+    - id: GS001-ADCS-MODE
+      name: Direct ADCS inertial-mode command
+      command: GENERIC_ADCS GENERIC_ADCS_SET_MODE_CC with GNC_MODE INERTIAL_MODE
+      telemetry_requests:
+        - GENERIC_ADCS GENERIC_ADCS_REQ_HK
+        - GENERIC_ADCS GENERIC_ADCS_SEND_GNC_CC
+      telemetry:
+        cmd_count: GENERIC_ADCS GENERIC_ADCS_HK_TLM CMD_COUNT
+        err_count: GENERIC_ADCS GENERIC_ADCS_HK_TLM CMD_ERR_COUNT
+        mode: GENERIC_ADCS GENERIC_ADCS_GNC MODE
+      observations:
+        - type: counter_increased
+          name: cmd_count
+          min_delta: 1
+        - type: error_unchanged
+          name: err_count
+        - type: equals
+          name: mode
+          expected_any: [INERTIAL, INERTIAL_MODE, 3]
+      recovery:
+        - type: command
+          command: GENERIC_ADCS GENERIC_ADCS_SET_MODE_CC with GNC_MODE PASSIVE
+      recovery_observations:
+        - type: equals
+          name: mode
+          expected_any: [PASSIVE, 0]
+
+    - id: GS001-RW-TORQUE
+      name: Direct reaction-wheel torque command
+      command: GENERIC_REACTION_WHEEL GENERIC_RW_SET_TORQUE_CC with WHEEL_NUMBER 0, TORQUE 10
+      telemetry_requests:
+        - GENERIC_REACTION_WHEEL GENERIC_RW_REQ_DATA_CC
+      telemetry:
+        cmd_count: GENERIC_REACTION_WHEEL GENRW_HK_TLM_T COMMAND_COUNT
+        err_count: GENERIC_REACTION_WHEEL GENRW_HK_TLM_T ERROR_COUNT
+        momentum0: GENERIC_REACTION_WHEEL GENRW_HK_TLM_T MOMENTUM_NMS_0
+      observations:
+        - type: counter_increased
+          name: cmd_count
+          min_delta: 1
+        - type: error_unchanged
+          name: err_count
+        - type: changed
+          name: momentum0
+          min_abs_delta: 0.000001
+      recovery:
+        - type: command
+          command: GENERIC_REACTION_WHEEL GENERIC_RW_SET_TORQUE_CC with WHEEL_NUMBER 0, TORQUE 0
+
+    - id: GS001-EPS-SWITCH
+      name: Direct EPS switch-off command
+      command: GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE OFF
+      telemetry_requests:
+        - GENERIC_EPS GENERIC_EPS_REQ_HK
+      telemetry:
+        cmd_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_COUNT
+        err_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_ERR_COUNT
+        switch0: GENERIC_EPS GENERIC_EPS_HK_TLM SWITCH_0_STATE
+      setup:
+        - type: command
+          command: GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      observations:
+        - type: counter_increased
+          name: cmd_count
+          min_delta: 1
+        - type: error_unchanged
+          name: err_count
+        - type: changed
+          name: switch0
+        - type: equals
+          name: switch0
+          expected_any: ["OFF", 0]
+      recovery:
+        - type: command
+          command: GENERIC_EPS GENERIC_EPS_SWITCH_CC with SWITCH_NUMBER 0, STATE ON
+      recovery_observations:
+        - type: equals
+          name: switch0
+          expected_any: ["ON", 170]
+
+    - id: GS001-ES-SHELL
+      name: Direct cFE Executive Services shell command
+      command: CFE CFE_ES_SHELL_CMD with CMDSTRING /bin/date, OUTPUTFILENAME /cf/gs001_es_shell.out
+      telemetry:
+        cmd_count: CFS CFE_ES_HKPACKET CMDCOUNTER
+        err_count: CFS CFE_ES_HKPACKET ERRCOUNTER
+      file_checks:
+        shell_output: /cf/gs001_es_shell.out
+      setup:
+        - type: file_delete
+          path: /cf/gs001_es_shell.out
+      observations:
+        - type: counter_increased
+          name: cmd_count
+          min_delta: 1
+        - type: error_unchanged
+          name: err_count
+        - type: file_exists
+          name: shell_output
+      recovery:
+        - type: file_delete
+          path: /cf/gs001_es_shell.out
+
+    - id: GS001-MM-POKE
+      name: Direct Memory Manager poke to a calibrated flight-process symbol
+      command: CFS MM_POKE with DATASIZE 8, MEMTYPE 0, DATA 165, DESTSYMADDRESS_OFFSET 0, DESTSYMADDRESS_SYMNAME 'CommandData'
+      telemetry_requests:
+        - CFS MM_DUMP_MEM_TO_FILE with MEMTYPE 0, NUMOFBYTES 1, SRCSYMADDRESS_OFFSET 0, SRCSYMADDRESS_SYMNAME 'CommandData', FILENAME '/data/gs001_mm_poke.bin'
+      file_checks:
+        mm_probe: /data/gs001_mm_poke.bin
+      setup:
+        - type: file_delete
+          path: /data/gs001_mm_poke.bin
+      setup_observations:
+        - type: file_exists
+          name: mm_probe
+      observations:
+        - type: file_exists
+          name: mm_probe
+        - type: file_first_byte_changed
+          name: mm_probe
+        - type: file_first_byte_equals
+          name: mm_probe
+          expected: 165
+      recovery:
+        - type: command
+          command: CFS MM_POKE with DATASIZE 8, MEMTYPE 0, DATA ${before.files.mm_probe.first_byte}, DESTSYMADDRESS_OFFSET 0, DESTSYMADDRESS_SYMNAME 'CommandData'
+      recovery_observations:
+        - type: file_first_byte_equals
+          name: mm_probe
+          expected_template: ${before.files.mm_probe.first_byte}
+
+    - id: GS001-TIME-SET
+      name: Direct cFE mission elapsed time set command
+      command: CFS CFE_TIME_SET_MET with SECONDS 123456, MICROSECONDS 0
+      telemetry_requests:
+        - CFS CFE_TIME_SEND_HK
+      telemetry:
+        cmd_count: CFS CFE_TIME_HKPACKET CMDCOUNTER
+        err_count: CFS CFE_TIME_HKPACKET ERRCOUNTER
+        seconds_met: CFS CFE_TIME_HKPACKET SECONDSMET
+      observations:
+        - type: counter_increased
+          name: cmd_count
+          min_delta: 1
+        - type: error_unchanged
+          name: err_count
+        - type: at_least
+          name: seconds_met
+          min: 123456
+      recovery:
+        - type: command
+          command: CFS CFE_TIME_SET_MET with SECONDS ${before.telemetry.seconds_met.value}, MICROSECONDS 0
+
+    - id: GS001-FM-DELETE
+      name: Direct File Manager delete command against a benchmark-owned file
+      command: CFS FM_DELETE with FILENAME /data/gs001_delete_probe.txt
+      telemetry_requests:
+        - CFS FM_SEND_HK
+      telemetry:
+        cmd_count: CFS FM_HOUSEKEEPINGPKT COMMANDCOUNTER
+        err_count: CFS FM_HOUSEKEEPINGPKT COMMANDERRCOUNTER
+      file_checks:
+        delete_probe: /data/gs001_delete_probe.txt
+      setup:
+        - type: file_delete
+          path: /data/gs001_delete_probe.txt
+        - type: file_write
+          path: /data/gs001_delete_probe.txt
+          content: GS001 delete probe
+      observations:
+        - type: counter_increased
+          name: cmd_count
+          min_delta: 1
+        - type: error_unchanged
+          name: err_count
+        - type: file_existed_before
+          name: delete_probe
+        - type: file_missing
+          name: delete_probe
+      recovery:
+        - type: file_write
+          path: /data/gs001_delete_probe.txt
+          content: GS001 delete probe restored
+      recovery_observations:
+        - type: file_exists
+          name: delete_probe
+metrics:
+  - per_tc_attack_command_sent
+  - per_tc_target_command_counter_delta
+  - per_tc_target_error_counter_delta
+  - per_tc_real_effect_observed
+  - per_tc_recovery_succeeded
+pass_criteria:
+  per_case_required:
+    external_runner_only: true
+    no_nos3_implant: true
+    no_cosmos_procedure_implant: true
+    no_malicious_cfs_app: true
+    dangerous_tc_sent_through_cosmos_api: true
+    command_counter_increments: true
+    error_counter_unchanged: true
+    real_case_specific_effect_observed: true
+    recovery_succeeds: true
+notes: GS-001 is a suite. Each listed dangerous telecommand has an independent pass/fail verdict. A passed case means the real command executed and produced a real observable effect without an independent authorization gate at the ground command interface.

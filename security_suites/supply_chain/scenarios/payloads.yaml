@@ -1,0 +1,49 @@
+suite_id: SC-PAYLOAD
+name: Existing real-effect payload adapters
+domain: supply_chain
+profiles:
+  - id: SC-PAYLOAD-EXFIL
+    name: Legitimate-path telemetry exfiltration
+    implementation_status: live_verified
+    route:
+      source_message_id: NOVATEL_OEM615_DEVICE_TLM_MID
+      source_message_value: 0x0871
+      cfs_output_app: TO_LAB
+      receiver: radio-sim_or_attacker_receiver
+    evidence: [source_telemetry_observed, to_lab_output_observed, receiver_payload_hash_match]
+  - id: SC-PAYLOAD-SP001
+    name: Software Bus command spoof
+    implementation_status: live_integrated
+    source_suite: space_platform/SP001
+    real_target: GENERIC_ADCS_and_native_SB_consumers
+    command_path: vendor_app_to_native_component_command_mid
+    evidence: [target_hk_state_changed, native_event_or_command_counter, recovery_state_restored]
+  - id: SC-PAYLOAD-SP003
+    name: Application lifecycle and restart pressure
+    implementation_status: live_integrated
+    source_suite: space_platform/SP003
+    real_target: cFE_Executive_Services_and_vendor_app_lifecycle
+    command_path: vendor_app_bounded_es_lifecycle_request
+    evidence: [es_event_observed, app_boot_or_restart_counter, recovery_app_running]
+  - id: SC-PAYLOAD-SP006
+    name: Payload critical interface abuse
+    implementation_status: live_integrated
+    source_suite: space_platform/SP006
+    real_target: real_payload_or_actuator_interface
+    command_path: vendor_app_native_payload_command_mid
+    evidence: [payload_interface_event, target_command_counter, recovery_interface_nominal]
+  - id: SC-PAYLOAD-SP007
+    name: Resource exhaustion
+    implementation_status: live_integrated
+    source_suite: space_platform/SP007
+    real_target: cFE_software_bus_OSAL_storage_or_CPU
+    command_path: vendor_app_bounded_resource_profile
+    evidence: [resource_pressure_observed, bounded_cleanup_event, recovery_resource_nominal]
+  - id: SC-PAYLOAD-SP008
+    name: Subsystem state spoof
+    implementation_status: live_integrated
+    source_suite: space_platform/SP008
+    real_target: real_EPS_ADCS_navigation_or_actuator_telemetry
+    command_path: vendor_app_native_state_telemetry_mid
+    evidence: [forged_native_hk_observed, source_state_mismatch, recovery_spoof_stopped]
+matrix_rule: every SC-APP profile exposes the payload profiles as selectable live cases

@@ -1,0 +1,26 @@
+id: RF-LINK-008
+name: RF link packet reordering
+domain: rf_link
+description:
+  attack_entry: RF-link uplink command path or cryptolib-to-ground downlink telemetry path
+  affected_component: COM interface, TC fetcher, cFS command handlers, COSMOS telemetry cache
+  cps_type: Communication
+  security_consequence: Temporal inconsistency when command order or telemetry freshness matters
+  recovery_strategy: Sequence validation, temporal constraints, command precondition checks
+  injection_method: Directional UDP proxy buffers a small window of packets and forwards them in random order
+attack:
+  type: reorder
+  direction: both
+  directions:
+    - uplink
+    - downlink
+  window_size: 4
+metrics:
+  - packet_received
+  - packets_reordered
+  - command_sequence
+  - event_log
+pass_criteria:
+  min_packets_received: 4
+  min_attack_events: 0
+notes: The downlink case requests enough EPS housekeeping packets to fill the fixed reorder window.

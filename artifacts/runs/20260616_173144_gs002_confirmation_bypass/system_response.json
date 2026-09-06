@@ -1,0 +1,82 @@
+{
+  "after": {
+    "armed": 1,
+    "collection_count": 1,
+    "command": 3,
+    "error": 0,
+    "high_rate": 1,
+    "last_accepted": 4,
+    "last_rejected": 0,
+    "mode": 3,
+    "unauthorized": 0
+  },
+  "attempted_results": [
+    {
+      "command": "BENCH_PAYLOAD_ARM",
+      "command_line": "CFS BENCH_PAYLOAD_ARM",
+      "ok": true,
+      "started_at": "2026-06-16T09:31:53Z"
+    },
+    {
+      "command": "BENCH_PAYLOAD_ENABLE_HIGH_RATE",
+      "command_line": "CFS BENCH_PAYLOAD_ENABLE_HIGH_RATE",
+      "ok": true,
+      "started_at": "2026-06-16T09:31:53Z"
+    },
+    {
+      "command": "BENCH_PAYLOAD_START_COLLECTION",
+      "command_line": "CFS BENCH_PAYLOAD_START_COLLECTION",
+      "ok": true,
+      "started_at": "2026-06-16T09:31:54Z"
+    }
+  ],
+  "before": {
+    "armed": 0,
+    "collection_count": 0,
+    "command": 4,
+    "error": 0,
+    "high_rate": 0,
+    "last_accepted": 0,
+    "last_rejected": 0,
+    "mode": 0,
+    "unauthorized": 0
+  },
+  "confirmation_policy": {
+    "audit_trail_complete": false,
+    "blocked": false,
+    "confirmation_gap_detected": true,
+    "confirmation_record": null,
+    "confirmation_record_present": false,
+    "critical_command": "BENCH_PAYLOAD_START_COLLECTION",
+    "enforcement_enabled": false,
+    "expected_confirmation": "two_step_operator_confirm",
+    "script_name": "GS-002 critical command confirmation bypass"
+  },
+  "noop_after": {
+    "after": {
+      "armed": 1,
+      "collection_count": 1,
+      "command": 4,
+      "error": 0,
+      "high_rate": 1,
+      "last_accepted": 0,
+      "last_rejected": 0,
+      "mode": 3,
+      "unauthorized": 0
+    },
+    "before": {
+      "armed": 1,
+      "collection_count": 1,
+      "command": 3,
+      "error": 0,
+      "high_rate": 1,
+      "last_accepted": 4,
+      "last_rejected": 0,
+      "mode": 3,
+      "unauthorized": 0
+    },
+    "delta": 1,
+    "ok": true
+  },
+  "ok": true
+}

@@ -1,0 +1,44 @@
+id: GS-004
+name: Ground configuration pollution
+domain: ground_system
+description:
+  attack_entry: External runner changes one live COSMOS ground configuration entry, executes a normal operation, and restores the exact original bytes
+  affected_component: COSMOS mission procedures and CmdTlmServer interface routing configuration
+  cps_type: Ground configuration integrity / operational command routing boundary
+  security_consequence: A legitimate ground operation can encode an unintended destination or be silently routed away from the flight interface
+  recovery_strategy: Restore the exact configuration bytes and SHA-256, reload CmdTlmServer only for interface-routing changes, then execute the normal operation or safe NOOP
+  injection_method: External Python runner modifies only the listed mounted COSMOS configuration file and never changes cFS, NOS3, or command dictionaries
+attack:
+  type: ground_configuration_pollution
+  docker_container: cosmos-openc3-operator-1
+  command_server_root: /home/leejm/nos3/gsw/cosmos
+  cases:
+    - id: GS004-PROCEDURE-DEST-PORT
+      kind: procedure
+      config_path: /home/leejm/nos3/gsw/cosmos/config/targets/MISSION/procedures/com/debug.rb
+      mutation: {original: "DEST_PORT 5013", replacement: "DEST_PORT 5015"}
+      procedure_path: /home/leejm/nos3/gsw/cosmos/config/targets/MISSION/procedures/com/debug.rb
+      command: TO_DEBUG TO_DEBUG_ENABLE_OUTPUT_CC
+      expected_packet_hex_fragment: "9713"
+
+    - id: GS004-PROCEDURE-DEST-IP
+      kind: procedure
+      config_path: /home/leejm/nos3/gsw/cosmos/config/targets/MISSION/procedures/com/debug.rb
+      mutation: {original: "DEST_IP 'cosmos'", replacement: "DEST_IP '127.0.0.1'"}
+      procedure_path: /home/leejm/nos3/gsw/cosmos/config/targets/MISSION/procedures/com/debug.rb
+      command: TO_DEBUG TO_DEBUG_ENABLE_OUTPUT_CC
+      expected_packet_hex_fragment: "3132372e302e302e31"
+
+    - id: GS004-DEBUG-ROUTE-ENDPOINT
+      kind: route
+      config_path: /home/leejm/nos3/gsw/cosmos/config/tools/cmd_tlm_server/cmd_tlm_server.txt
+      mutation:
+        original: "INTERFACE DEBUG udp_interface.rb nos-fsw 5012 5013 nil nil 128 nil nil\n"
+        replacement: "INTERFACE DEBUG udp_interface.rb 127.0.0.1 5012 5013 nil nil 128 nil nil\n"
+      command: GENERIC_EPS GENERIC_EPS_NOOP_CC
+      telemetry_requests: [GENERIC_EPS GENERIC_EPS_REQ_HK]
+      telemetry: {cmd_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_COUNT, err_count: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_ERR_COUNT}
+metrics: [configuration_backup_hash, exact_replacement, command_buffer_configuration_effect, target_execution_or_misdirection, rollback_hash]
+pass_criteria:
+  all_cases: [exact_single_replacement, original_configuration_restored, normal_operation_or_safe_noop_observed_after_restore]
+notes: Procedure cases prove incorrect command parameters from a polluted ground operation file. The route case proves a valid COSMOS command can be accepted locally yet not reach cFS when the ground endpoint configuration is changed.

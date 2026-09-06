@@ -1,0 +1,70 @@
+{
+  "after": {
+    "armed": 0,
+    "collection_count": 0,
+    "command": 0,
+    "error": 0,
+    "high_rate": 0,
+    "last_accepted": 0,
+    "last_rejected": 0,
+    "mode": 0,
+    "unauthorized": 0
+  },
+  "attempted_results": [],
+  "before": {
+    "armed": 0,
+    "collection_count": 0,
+    "command": 0,
+    "error": 0,
+    "high_rate": 0,
+    "last_accepted": 0,
+    "last_rejected": 0,
+    "mode": 0,
+    "unauthorized": 0
+  },
+  "ground_policy": {
+    "attempted_sequence": [
+      "BENCH_PAYLOAD_START_COLLECTION"
+    ],
+    "blocked": true,
+    "enforcement_enabled": true,
+    "missing_before_critical": [
+      "BENCH_PAYLOAD_ARM",
+      "BENCH_PAYLOAD_ENABLE_HIGH_RATE"
+    ],
+    "required_sequence": [
+      "BENCH_PAYLOAD_ARM",
+      "BENCH_PAYLOAD_ENABLE_HIGH_RATE",
+      "BENCH_PAYLOAD_START_COLLECTION"
+    ],
+    "script_name": "GS-001 ground command script misuse",
+    "violation_detected": true
+  },
+  "noop_after": {
+    "after": {
+      "armed": 0,
+      "collection_count": 0,
+      "command": 0,
+      "error": 0,
+      "high_rate": 0,
+      "last_accepted": 0,
+      "last_rejected": 0,
+      "mode": 0,
+      "unauthorized": 0
+    },
+    "before": {
+      "armed": 0,
+      "collection_count": 0,
+      "command": 0,
+      "error": 0,
+      "high_rate": 0,
+      "last_accepted": 0,
+      "last_rejected": 0,
+      "mode": 0,
+      "unauthorized": 0
+    },
+    "delta": 0,
+    "ok": false
+  },
+  "ok": true
+}

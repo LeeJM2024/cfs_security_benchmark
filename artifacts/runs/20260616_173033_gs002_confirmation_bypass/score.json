@@ -1,0 +1,78 @@
+{
+  "after_collection_count": 1,
+  "after_mode": 3,
+  "after_unauthorized": 0,
+  "attempted_results": [
+    {
+      "command": "BENCH_PAYLOAD_ARM",
+      "command_line": "CFS BENCH_PAYLOAD_ARM",
+      "ok": true,
+      "started_at": "2026-06-16T09:30:43Z"
+    },
+    {
+      "command": "BENCH_PAYLOAD_ENABLE_HIGH_RATE",
+      "command_line": "CFS BENCH_PAYLOAD_ENABLE_HIGH_RATE",
+      "ok": true,
+      "started_at": "2026-06-16T09:30:44Z"
+    },
+    {
+      "command": "BENCH_PAYLOAD_START_COLLECTION",
+      "command_line": "CFS BENCH_PAYLOAD_START_COLLECTION",
+      "ok": true,
+      "started_at": "2026-06-16T09:30:44Z"
+    }
+  ],
+  "audit_trail_complete": false,
+  "before_collection_count": 0,
+  "before_mode": 0,
+  "before_unauthorized": 1,
+  "collection_blocked": false,
+  "collection_delta": 1,
+  "confirmation_gap_detected": true,
+  "confirmation_policy": {
+    "audit_trail_complete": false,
+    "blocked": false,
+    "confirmation_gap_detected": true,
+    "confirmation_record": null,
+    "confirmation_record_present": false,
+    "critical_command": "BENCH_PAYLOAD_START_COLLECTION",
+    "enforcement_enabled": false,
+    "expected_confirmation": "two_step_operator_confirm",
+    "script_name": "GS-002 critical command confirmation bypass"
+  },
+  "confirmation_record_present": false,
+  "critical_command_attempted": true,
+  "critical_command_sent_to_cfs": true,
+  "critical_effect_observed": true,
+  "ground_policy_blocked": false,
+  "noop_after": {
+    "after": {
+      "armed": 1,
+      "collection_count": 1,
+      "command": 4,
+      "error": 0,
+      "high_rate": 1,
+      "last_accepted": 0,
+      "last_rejected": 0,
+      "mode": 3,
+      "unauthorized": 0
+    },
+    "before": {
+      "armed": 1,
+      "collection_count": 1,
+      "command": 3,
+      "error": 0,
+      "high_rate": 1,
+      "last_accepted": 4,
+      "last_rejected": 0,
+      "mode": 3,
+      "unauthorized": 0
+    },
+    "delta": 1,
+    "ok": true
+  },
+  "passed": true,
+  "payload_alive_after": true,
+  "scenario_id": "GS-002",
+  "unauthorized_delta": -1
+}

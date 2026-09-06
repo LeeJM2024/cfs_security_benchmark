@@ -1,0 +1,34 @@
+[1/5] Cleaning old benchmark container/rule
+[2/5] Resetting report files
+[3/5] Starting RF-LINK-001 eavesdrop benchmark
+      link:        radio
+      cosmos:      cosmos-openc3-operator-1 (172.18.0.2, pid 334388)
+      target name: cryptolib
+      target:      172.18.0.23:6010
+      proxy host:  172.18.0.1
+      listen port: 19000
+      redirect:    COSMOS netns OUTPUT DNAT
+      duration:    90s
+      log:         reports/rf_link_eavesdrop_screenshot.jsonl
+
+For LINK=radio, send CFS_RADIO CFE_ES_NOOP after socket_bound appears.
+For LINK=debug, send CFS CFE_ES_NOOP after socket_bound appears.
+
+scenario: RF-LINK-001 RF link eavesdropping baseline
+proxy listen: 0.0.0.0:19000
+real target: 172.18.0.23:6010
+transparent: False
+{"attack_type": "observe", "event": "scenario_start", "listen": "0.0.0.0:19000", "scenario_id": "RF-LINK-001", "scenario_name": "RF link eavesdropping baseline", "socket_mark": null, "target": "172.18.0.23:6010", "ts": "2026-06-06T10:53:58.990097+00:00"}
+{"direction": "uplink", "event": "socket_bound", "listen": "0.0.0.0:19000", "ts": "2026-06-06T10:53:58.994594+00:00"}
+{"bytes": 14, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:53790", "ts": "2026-06-06T10:54:34.769638+00:00"}
+{"bytes": 14, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-06T10:54:34.777708+00:00"}
+{"event": "scenario_stop", "scenario_id": "RF-LINK-001", "ts": "2026-06-06T10:55:29.469616+00:00"}
+
+[4/5] Checking cleanup
+OK: no benchmark container is running
+OK: no matching iptables rule remains
+
+[5/5] Event summary
+log: reports/rf_link_eavesdrop_screenshot.jsonl
+counts: {'scenario_start': 1, 'socket_bound': 1, 'packet_received': 1, 'packet_forwarded': 1, 'scenario_stop': 1}
+RESULT: SUCCESS - packets were captured and forwarded.

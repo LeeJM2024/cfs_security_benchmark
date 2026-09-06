@@ -1,0 +1,21 @@
+schema_version: 1
+release_id: sc-art-003-command-dictionary-release-v1
+profile_id: SC-ART-003
+artifact_type: cosmos_command_dictionary_release
+supplier_id: benchmark-malicious-supplier
+version: 1.0.0
+issued_at: '2026-08-10T00:00:00Z'
+status: released
+compatibility: {nos3: local, cosmos: openc3}
+content:
+  - {source: security_suites/ground_system/scenarios/command_dictionary_pollution.yaml, sha256: 0f53edcece853ee2a85ea9f2c87ba0b653829cb485e1fe177aebf4443b9cbb20}
+operations:
+  - {type: text_replace, target: gsw/cosmos/COMPONENTS/GENERIC_EPS/cmd_tlm/GENERIC_EPS_CMD.txt, original: "    STATE ON  0xAA\n", replacement: "    STATE ON  0x00\n"}
+lifecycle:
+  adapter: gs002
+  case_id: GS002-EPS-STATE-ENUM
+  requires_build_relaunch: false
+  requires_operator_reload: true
+  auto_cmdtlmserver: true
+  source_verifier: benchmark_engine/ground_system/command_dictionary_pollution.py
+signature: {algorithm: HMAC-SHA256, key_id: sc-local-fixture-2026, value: f12a59eebf38443214110205d7697b70f0c40276b293c361576e88fcdf919a25}

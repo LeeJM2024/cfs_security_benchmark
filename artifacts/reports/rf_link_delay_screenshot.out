@@ -1,0 +1,29 @@
+scenario: RF-LINK-003 RF link command delay
+proxy listen: 0.0.0.0:19000
+real target: 172.18.0.23:6010
+transparent: False
+{"attack_type": "delay", "event": "scenario_start", "listen": "0.0.0.0:19000", "scenario_id": "RF-LINK-003", "scenario_name": "RF link command delay", "socket_mark": null, "target": "172.18.0.23:6010", "ts": "2026-06-07T08:44:56.706132+00:00"}
+{"direction": "uplink", "event": "socket_bound", "listen": "0.0.0.0:19000", "ts": "2026-06-07T08:44:56.709789+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:44:59.556801+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:01.562613+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:04.901165+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:06.907813+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:06.915513+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:08.918191+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:10.501552+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:12.504153+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:12.506620+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:14.510595+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:14.511539+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:16.515414+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:16.516471+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:18.520915+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:18.522094+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:20.525590+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:20.529669+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:22.533553+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:22.541294+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:24.543862+00:00"}
+{"bytes": 8, "direction": "uplink", "event": "packet_received", "sender": "172.18.0.2:46379", "ts": "2026-06-07T08:45:24.548742+00:00"}
+{"bytes": 8, "destination": "172.18.0.23:6010", "direction": "uplink", "event": "packet_forwarded", "ts": "2026-06-07T08:45:26.551660+00:00"}
+{"event": "scenario_stop", "scenario_id": "RF-LINK-003", "ts": "2026-06-07T08:45:27.052893+00:00"}

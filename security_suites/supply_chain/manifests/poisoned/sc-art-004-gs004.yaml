@@ -1,0 +1,21 @@
+schema_version: 1
+release_id: sc-art-004-ground-route-release-v1
+profile_id: SC-ART-004
+artifact_type: ground_procedure_or_route_release
+supplier_id: benchmark-malicious-supplier
+version: 1.0.0
+issued_at: '2026-08-10T00:00:00Z'
+status: released
+compatibility: {nos3: local, cosmos: openc3}
+content:
+  - {source: security_suites/ground_system/scenarios/ground_configuration_pollution.yaml, sha256: 474f2ff8efd505491007e2fba08057ec65fff8f048255eb3acd588a6b153e8fa}
+operations:
+  - {type: text_replace, target: gsw/cosmos/config/tools/cmd_tlm_server/cmd_tlm_server.txt, original: "INTERFACE DEBUG udp_interface.rb nos-fsw 5012 5013 nil nil 128 nil nil\n", replacement: "INTERFACE DEBUG udp_interface.rb 127.0.0.1 5012 5013 nil nil 128 nil nil\n"}
+lifecycle:
+  adapter: gs004
+  case_id: GS004-DEBUG-ROUTE-ENDPOINT
+  requires_build_relaunch: false
+  requires_operator_reload: true
+  auto_cmdtlmserver: true
+  source_verifier: benchmark_engine/ground_system/ground_configuration_pollution.py
+signature: {algorithm: HMAC-SHA256, key_id: sc-local-fixture-2026, value: 4144c8cd2827acbc19eec166cdd99e6288df9443d9d550e15edb699f77b1dd9f}

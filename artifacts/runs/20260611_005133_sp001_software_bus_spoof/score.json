@@ -1,0 +1,9 @@
+{
+  "attack_sent_after": 1,
+  "last_payload_word": 305441742,
+  "passed": true,
+  "scenario_id": "SP-001",
+  "victim_after": 2,
+  "victim_before": 1,
+  "victim_delta": 1
+}

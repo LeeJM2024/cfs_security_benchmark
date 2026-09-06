@@ -1,0 +1,9 @@
+#ifndef SC_VENDOR_NAV_EVENTS_H
+#define SC_VENDOR_NAV_EVENTS_H
+
+#define SC_VENDOR_NAV_INIT_EID       1
+#define SC_VENDOR_NAV_CMD_EID        2
+#define SC_VENDOR_NAV_TRIGGER_EID    3
+#define SC_VENDOR_NAV_ERROR_EID      4
+
+#endif

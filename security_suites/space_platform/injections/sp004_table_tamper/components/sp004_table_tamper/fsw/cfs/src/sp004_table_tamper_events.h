@@ -1,0 +1,11 @@
+#ifndef _SP004_TABLE_TAMPER_EVENTS_H_
+#define _SP004_TABLE_TAMPER_EVENTS_H_
+
+#define SP004_STARTUP_INF_EID 1
+#define SP004_CMD_INF_EID     2
+#define SP004_CMD_ERR_EID     3
+#define SP004_TBL_INF_EID     4
+#define SP004_TBL_ERR_EID     5
+#define SP004_RUNTIME_ERR_EID 6
+
+#endif

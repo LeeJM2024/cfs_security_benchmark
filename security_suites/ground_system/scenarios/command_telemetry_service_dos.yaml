@@ -1,0 +1,35 @@
+id: GS-005
+name: Ground command and telemetry service denial of service
+domain: ground_system
+description:
+  attack_entry: Bounded external load generator uses the existing COSMOS API while independent command and telemetry canaries measure operator availability
+  affected_component: COSMOS CmdTlmServer command and telemetry service
+  cps_type: Ground command and telemetry service availability / recovery-channel isolation boundary
+  security_consequence: A bounded burst of ordinary requests can make operators unable to read telemetry or send a safe recovery command
+  recovery_strategy: Stop generating load by fixed duration and operation cap, wait for in-flight work to finish, then verify the command and telemetry canaries recover without restarting the service
+  injection_method: External Python runner starts a time-bounded Ruby load generator inside the existing COSMOS operator container; it does not kill processes or alter configuration
+attack:
+  type: command_telemetry_service_dos
+  docker_container: cosmos-openc3-operator-1
+  cases:
+    - id: GS005-CTS-API-CONCURRENCY
+      load_kind: telemetry_read
+      load_telemetry: GENERIC_EPS GENERIC_EPS_HK_TLM SWITCH_0_STATE
+    - id: GS005-TM-REQUEST-FLOOD
+      load_kind: command
+      load_command: GENERIC_EPS GENERIC_EPS_REQ_HK
+    - id: GS005-TC-QUEUE-SATURATION
+      load_kind: command
+      load_command: GENERIC_EPS GENERIC_EPS_NOOP_CC
+  telemetry_canary:
+    request: GENERIC_EPS GENERIC_EPS_REQ_HK
+    value: GENERIC_EPS GENERIC_EPS_HK_TLM SWITCH_0_STATE
+  command_canary:
+    command: GENERIC_EPS GENERIC_EPS_NOOP_CC
+    counter_request: GENERIC_EPS GENERIC_EPS_REQ_HK
+    counter: GENERIC_EPS GENERIC_EPS_HK_TLM CMD_COUNT
+metrics: [load_attempts, load_successes, load_failures, telemetry_canary_latency_ms, command_canary_latency_ms, consecutive_canary_failures, recovery_time_seconds]
+pass_criteria:
+  execution_required: [bounded_load_completed, service_available_after_load]
+  vulnerable_when: [telemetry_canary_unavailable_during_load, command_canary_unavailable_during_load, no_rate_limit_observed, no_priority_recovery_channel_observed]
+notes: The default caps are deliberately conservative. The benchmark does not restart CmdTlmServer and does not send state-changing commands.

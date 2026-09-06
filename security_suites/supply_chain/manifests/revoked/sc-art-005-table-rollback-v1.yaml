@@ -1,0 +1,13 @@
+schema_version: 1
+release_id: sc-art-005-table-rollback-v1
+profile_id: SC-ART-005
+artifact_type: flight_table_release
+supplier_id: benchmark-approved-supplier
+version: 1.0.0
+issued_at: '2025-01-01T00:00:00Z'
+status: released
+compatibility: {nos3: local, cfs: nos3-cfs}
+content: [{source: security_suites/space_platform/injections/sp004_table_tamper/components/sp004_table_tamper, sha256: dc288624958c15cfb8d20004d18bcbfa523e760d6a9ff0ec6b27700195a11249}]
+operations: [{type: append_unique_line, target: .sc_release_gate/table-rollback-v1, line: must-not-apply}]
+lifecycle: {adapter: acceptance_only, requires_build_relaunch: false, requires_operator_reload: false}
+signature: {algorithm: HMAC-SHA256, key_id: sc-local-fixture-2026, value: fd150d1ba978c324a5e31840ee062b31f3e1b971ddab69da811359673b9be873}

@@ -1,0 +1,19 @@
+id: cryptographic-boundary
+name: Cryptographic-boundary attack model
+supported_links:
+  - radio
+payload_format: protected_frame
+rf001:
+  attack_success_if: plaintext_ccsds_observed
+radio_paths:
+  uplink:
+    source_alias: cryptolib
+    destination_alias: radio-sim
+    destination_port: 8010
+    transport: tcp
+  downlink:
+    source_alias: radio-sim
+    destination_alias: cryptolib
+    destination_port: 8011
+    transport: tcp
+notes: The attacker observes the CryptoLib-radio-sim transport. A visible business CCSDS frame is an eavesdropping success; a protected opaque frame is reported as FAIL because the attack did not succeed.

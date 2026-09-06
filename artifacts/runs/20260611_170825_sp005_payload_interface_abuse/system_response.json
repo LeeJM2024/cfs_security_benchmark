@@ -1,0 +1,57 @@
+{
+  "after": {
+    "armed": 0,
+    "collection_count": 0,
+    "command": 0,
+    "error": 0,
+    "high_rate": 0,
+    "last_accepted": 0,
+    "last_rejected": 4,
+    "mode": 0,
+    "unauthorized": 1
+  },
+  "attack_command": {
+    "command": "CFS BENCH_PAYLOAD_START_COLLECTION",
+    "ok": true
+  },
+  "before": {
+    "armed": 0,
+    "collection_count": 0,
+    "command": 0,
+    "error": 0,
+    "high_rate": 0,
+    "last_accepted": 0,
+    "last_rejected": 0,
+    "mode": 0,
+    "unauthorized": 0
+  },
+  "expected_rejected_fc": 4,
+  "expected_safe_mode": 0,
+  "noop_after": {
+    "after": {
+      "armed": 0,
+      "collection_count": 0,
+      "command": 1,
+      "error": 0,
+      "high_rate": 0,
+      "last_accepted": 0,
+      "last_rejected": 4,
+      "mode": 0,
+      "unauthorized": 1
+    },
+    "before": {
+      "armed": 0,
+      "collection_count": 0,
+      "command": 0,
+      "error": 0,
+      "high_rate": 0,
+      "last_accepted": 0,
+      "last_rejected": 4,
+      "mode": 0,
+      "unauthorized": 1
+    },
+    "delta": 1,
+    "ok": true
+  },
+  "ok": true
+}

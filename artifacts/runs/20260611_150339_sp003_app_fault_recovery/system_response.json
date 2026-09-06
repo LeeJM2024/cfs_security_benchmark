@@ -1,0 +1,7 @@
+{
+  "error": "COSMOS Ruby script did not emit JSON",
+  "ok": false,
+  "returncode": 1,
+  "stderr": "-e:80: syntax error, unexpected modifier_rescue, expecting '}'\n...ONEAPPTLM APPINFO_NAME\") rescue nil,\n...                         ^~~~~~\n-e:80: Can't assign to nil\n...PTLM APPINFO_NAME\") rescue nil,\n...                              ^\n-e:81: Can't assign to nil\n...PPINFO_ENTRYPOINT\") rescue nil,\n...                              ^\n-e:82: syntax error, unexpected tLABEL, expecting '='\n    filename: tlm(\"CFS CFE_ES_ONEAPPTLM AP...\n    ^~~~~~~~~\n-e:82: Can't assign to nil\n... APPINFO_FILENAME\") rescue nil,\n...                              ^\n-e:83: syntax error, unexpected tLABEL, expecting '='\n    execution_counter: tlm(\"CFS CFE_ES_ONEAPPTLM AP...\n    ^~~~~~~~~~~~~~~~~~\n-e:84: syntax error, unexpected '}', expecting keyword_end\n",
+  "stdout": ""
+}
